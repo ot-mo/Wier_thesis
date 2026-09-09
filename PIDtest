@@ -1,0 +1,33 @@
+import time
+from PID import PIDController
+# 1. Create PID controller instance
+# Kp = 2.0, Ki = 0.5, Kd = 0.1
+# Limits heater output between 0% and 100% power
+pid = PIDController(
+    Kp=10.0, Ki=1.35, Kd=0.1, setpoint=100.0, output_limits=(0, 100)
+)
+
+# Simulation parameters
+current_temperature = 25.0  # Initial room temp (°C)
+dt = 0.1  # Simulate time step of 0.1 seconds
+
+print(f"Time (s) | Temp (°C) | Heater Output (%)")
+print("-" * 40)
+
+# Simulate 20 steps
+for step in range(200):
+    current_time = step * dt
+
+    # Get control output from PID
+    heater_power = pid.update(
+        measurement=current_temperature, current_time=current_time
+    )
+
+    # Physics simulation: Temperature increases based on power, loses heat to environment
+    heat_input = heater_power * 0.1
+    heat_loss = (current_temperature - 25.0) * 0.02
+    current_temperature += (heat_input - heat_loss) * dt
+
+    print(
+        f"{current_time:7.1f} | {current_temperature:9.2f} | {heater_power:17.2f}"
+    )

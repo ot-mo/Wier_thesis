@@ -3,14 +3,17 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
     if n == 0:
         return {"diagnosis": "No telemetry data.", "adjusted_setpoint": active_setpoint, "anomaly_flag": False}
 
-    # Extract series
-    efforts = [step["pump_effort"] for step in telemetry_window]
-    errors = [step["error"] for step in telemetry_window]
+    # Extract series safely
+    efforts = []
+    errors = []
+    for step in telemetry_window:
+        efforts.append(step.get("pump_effort", 0.0))
+        errors.append(step.get("error", 0.0))
     abs_errors = [abs(e) for e in errors]
 
-    # Baseline effort: use median of first half if enough data, else overall median
-    if n >= 4:
-        baseline_effort = sorted(efforts[:n//2])[n//4]  # median of first half
+    # Baseline effort: use median of first 3 steps if enough data, else overall median
+    if n >= 3:
+        baseline_effort = sorted(efforts[:3])[1]  # median of first 3
     else:
         baseline_effort = sorted(efforts)[n//2]
 
@@ -23,9 +26,9 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
     avg_recent_abs_error = sum(recent_abs_errors) / len(recent_abs_errors)
 
     # Dynamic thresholds
-    EFFORT_MARGIN = 0.8  # absolute increase over baseline to consider leak
-    EFFORT_RATIO = 1.4   # relative increase over baseline
-    ERROR_THRESHOLD = 0.3  # absolute error threshold for additional evidence
+    EFFORT_MARGIN = 0.5  # absolute increase over baseline to consider leak
+    EFFORT_RATIO = 1.2   # relative increase over baseline
+    ERROR_THRESHOLD = 0.2  # absolute error threshold for additional evidence
 
     # Leak evidence: effort significantly above baseline
     effort_excess = avg_recent_effort - baseline_effort
@@ -35,7 +38,7 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
     # either error is high OR effort is very high (to catch low-error leaks)
     high_effort = (effort_excess > EFFORT_MARGIN) or (effort_ratio > EFFORT_RATIO)
     high_error = avg_recent_abs_error > ERROR_THRESHOLD
-    very_high_effort = avg_recent_effort > 3.0  # absolute high effort
+    very_high_effort = avg_recent_effort > 2.0  # absolute high effort
 
     anomaly_flag = high_effort and (high_error or very_high_effort)
 

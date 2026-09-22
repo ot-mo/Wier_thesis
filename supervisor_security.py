@@ -41,7 +41,8 @@ BLOCKED_ATTR_NAMES = {
 SAFE_BUILTINS = {
     "abs": abs, "min": min, "max": max, "len": len, "round": round,
     "sum": sum, "sorted": sorted, "range": range, "enumerate": enumerate,
-    "zip": zip, "map": map, "filter": filter,
+    "zip": zip, "map": map, "filter": filter, "all": all, "any": any,
+    "pow": pow, "divmod": divmod,
     "float": float, "int": int, "bool": bool, "str": str, "list": list,
     "dict": dict, "tuple": tuple, "set": set,
     "True": True, "False": False, "None": None,

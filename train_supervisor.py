@@ -202,8 +202,25 @@ def append_failure_points(traces, run_label):
                 }) + "\n")
 
 
+def _next_trial_start():
+    """Scans SUPERVISORS_DIR for existing supervisor_gen_N.py files so a fresh
+    invocation continues numbering instead of restarting at 1 and silently
+    overwriting a previous run's audit trail (gen files are not run-scoped).
+    """
+    existing = [f for f in os.listdir(SUPERVISORS_DIR) if f.startswith("supervisor_gen_") and f.endswith(".py")]
+    max_n = 0
+    for f in existing:
+        try:
+            n = int(f[len("supervisor_gen_"):-len(".py")])
+            max_n = max(max_n, n)
+        except ValueError:
+            continue
+    return max_n + 1
+
+
 def main():
     num_trials = int(sys.argv[1]) if len(sys.argv) > 1 else 10
+    start_trial = _next_trial_start()
 
     with open(CURRENT_SUPERVISOR_PATH, "r", encoding="utf-8") as f:
         current_code = f.read()
@@ -221,8 +238,9 @@ def main():
     append_failure_points(best_traces, "trainer_baseline")
     print(f"[BASELINE] current_supervisor.py avg score: {best_score:.3f}")
 
-    for trial_idx in range(1, num_trials + 1):
-        print(f"\n=== Trial {trial_idx}/{num_trials} ===")
+    for i in range(num_trials):
+        trial_idx = start_trial + i
+        print(f"\n=== Trial {i + 1}/{num_trials} (gen_{trial_idx}) ===")
         failure_catalog = load_failure_catalog()
         prompt = build_prompt(current_code, best_score, best_traces, failure_catalog)
         response = call_deepseek(prompt)

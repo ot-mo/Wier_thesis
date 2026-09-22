@@ -35,8 +35,8 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
     else:
         base_effort = 0.923
 
-    error_comp = 2.0 * max(0.0, -med_error_short)
-    expected_effort = min(2.5, base_effort + error_comp)
+    error_comp = 0.8 * max(0.0, -med_error_short)
+    expected_effort = base_effort + error_comp
 
     dev_short = [e - expected_effort for e in recent_efforts_short]
     dev_long = [e - expected_effort for e in recent_efforts_long]
@@ -49,11 +49,11 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
 
     abs_dev_short = [abs(e - med_effort_short) for e in recent_efforts_short]
     mad_effort_short = median(abs_dev_short)
-    robust_sigma = max(0.015, 1.4826 * mad_effort_short)
+    robust_sigma = max(0.03, 1.4826 * mad_effort_short)
 
-    mild_threshold = max(0.07, 2.5 * robust_sigma)
-    moderate_threshold = max(0.14, 3.5 * robust_sigma)
-    severe_threshold = max(0.32, 5.0 * robust_sigma)
+    mild_threshold = max(0.15, 3.5 * robust_sigma)
+    moderate_threshold = max(0.25, 5.0 * robust_sigma)
+    severe_threshold = max(0.45, 7.0 * robust_sigma)
 
     error_slope = 0.0
     if short_n >= 4:
@@ -69,99 +69,93 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
         if var_x > 1e-9:
             error_slope = cov / var_x
 
-    filling_suppression = (short_n >= 5 and med_error_short < -0.05 and error_slope > 0.02)
+    recovering = (
+        short_n >= 5 and
+        med_error_short < 0.0 and
+        error_slope > 0.02 and
+        med_effort_short < 1.5
+    )
 
     short_exceed_mild = sum(1 for d in dev_short if d > mild_threshold)
     short_exceed_mod = sum(1 for d in dev_short if d > moderate_threshold)
     long_exceed_mild = sum(1 for d in dev_long if d > mild_threshold)
-    long_exceed_mod = sum(1 for d in dev_long if d > moderate_threshold)
 
-    rapid_onset = (
-        n >= 3 and
-        max_dev_short > 0.45 and
+    cusum = 0.0
+    for d in dev_short:
+        cusum = max(0.0, cusum + (d - 0.05))
+    cusum_trigger = cusum > 0.25
+
+    min_history = 10
+
+    persistent_mild = (
+        n >= min_history and
+        short_n >= 5 and
+        med_dev_short > mild_threshold and
+        short_exceed_mild >= max(4, int(short_n * 0.8)) and
         med_error_short < -0.03 and
-        error_slope < -0.01 and
-        not filling_suppression
+        not recovering
+    )
+
+    moderate_short = (
+        n >= min_history and
+        short_n >= 5 and
+        med_dev_short > moderate_threshold and
+        short_exceed_mod >= max(3, int(short_n * 0.6)) and
+        med_error_short < -0.02 and
+        not recovering
     )
 
     severe_deviation = (
         short_n >= 3 and
         med_dev_short > severe_threshold and
         med_error_short < -0.02 and
-        not filling_suppression
+        not recovering
     )
 
-    persistent_severe = (
-        short_n >= 5 and
-        med_dev_short > severe_threshold and
-        med_error_short < -0.04 and
-        not filling_suppression
-    )
-
-    extreme_dev = (
+    severe_absolute = (
         short_n >= 3 and
-        max_dev_short > 1.0 and
-        med_dev_short > 0.4 and
-        not filling_suppression
+        med_effort_short > 1.8 and
+        med_error_short < -0.03 and
+        not recovering
     )
 
-    standard_short = (
-        short_n >= 5 and
-        med_dev_short > moderate_threshold and
-        short_exceed_mod >= max(2, int(short_n * 0.6)) and
-        mean_dev_short > moderate_threshold * 0.75 and
-        not filling_suppression
-    )
-
-    standard_long = (
-        long_n >= 10 and
-        med_dev_long > mild_threshold and
-        mean_dev_long > mild_threshold and
-        long_exceed_mild >= max(5, int(long_n * 0.7)) and
-        not filling_suppression
-    )
-
-    mild_long = (
-        long_n >= 15 and
-        med_dev_long > 0.04 and
-        mean_dev_long > 0.05 and
-        long_exceed_mild >= max(4, int(long_n * 0.5)) and
-        robust_sigma < 0.25 and
-        not filling_suppression
+    cusum_anomaly = (
+        n >= min_history and
+        cusum_trigger and
+        med_error_short < -0.03 and
+        not recovering
     )
 
     anomaly_flag = (
-        rapid_onset or
+        persistent_mild or
+        moderate_short or
         severe_deviation or
-        persistent_severe or
-        extreme_dev or
-        standard_short or
-        standard_long or
-        mild_long
+        severe_absolute or
+        cusum_anomaly
     )
 
     last_dev = efforts[-1] - expected_effort if n >= 1 else 0.0
     last_error = errors[-1] if n >= 1 else 0.0
 
     clear_short = (
-        short_n >= 3 and
-        med_dev_short < 0.05 and
-        short_exceed_mild <= 0 and
-        abs(med_error_short) < 0.04
+        short_n >= 5 and
+        med_dev_short < mild_threshold * 0.5 and
+        short_exceed_mild == 0 and
+        abs(med_error_short) < 0.06
     )
 
     clear_long = (
-        long_n >= 5 and
-        med_dev_long < 0.04 and
+        long_n >= 10 and
+        med_dev_long < 0.10 and
         long_exceed_mild <= max(1, int(long_n * 0.2)) and
-        abs(med_error_long) < 0.06
+        abs(med_error_long) < 0.10
     )
 
     immediate_clear = (
         n >= 2 and
-        abs(last_dev) < 0.08 and
-        abs(last_error) < 0.08 and
-        abs(med_effort_short - expected_effort) < 0.06
+        abs(last_dev) < 0.10 and
+        abs(last_error) < 0.10 and
+        abs(med_effort_short - expected_effort) < 0.08
     )
 
     if clear_short or clear_long or immediate_clear:
@@ -169,19 +163,22 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
 
     if anomaly_flag:
         if med_dev_short > 0.5:
-            adjustment = 0.25
-        elif med_dev_short > 0.25:
             adjustment = 0.15
-        else:
+        elif med_dev_short > 0.25:
             adjustment = 0.08
+        else:
+            adjustment = 0.04
         adjusted_setpoint = max(0.0, active_setpoint - adjustment)
-        diagnosis = f'Anomaly detected: effort median {med_effort_short:.2f} (excess {med_dev_short:.2f}), lowering setpoint by {adjustment:.2f}.'
+        diagnosis = (
+            f'Anomaly detected: effort median {med_effort_short:.2f} '
+            f'(excess {med_dev_short:.2f}), lowering setpoint by {adjustment:.2f}.'
+        )
     else:
         if (active_setpoint < nominal_target and
-            med_dev_short < 0.03 and
-            abs(med_error_short) < 0.04 and
-            mean_dev_long < 0.05):
-            restore_step = min(0.06, nominal_target - active_setpoint)
+            med_dev_short < mild_threshold * 0.4 and
+            abs(med_error_short) < 0.10 and
+            mean_dev_long < 0.12):
+            restore_step = min(0.04, nominal_target - active_setpoint)
             adjusted_setpoint = min(nominal_target, active_setpoint + restore_step)
             diagnosis = 'System stable and below nominal, restoring setpoint toward nominal.'
         else:

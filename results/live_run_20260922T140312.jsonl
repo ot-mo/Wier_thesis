@@ -1,0 +1,402 @@
+{"event": "run_start", "supervisor_source_hash": "c4a9d112d4dae5702579a9cc9f42728e23f5f7c0b41b596fb11680da1a52e2fb"}
+{"event": "step", "time": 0.0, "level": 1.9646446609406727, "pump_effort": 0.0, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.1, "level": 2.087494904499417, "pump_effort": 3.1578337841309483, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.2, "level": 2.1413521388502326, "pump_effort": 1.7995529691704168, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.3, "level": 2.1949569349269673, "pump_effort": 1.8037639027342034, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.4, "level": 2.244771412403055, "pump_effort": 1.7370589021084661, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.5, "level": 2.291264094065738, "pump_effort": 1.6789816951367853, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.6, "level": 2.3346595350654433, "pump_effort": 1.6247549229215372, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.7, "level": 2.3751769685219677, "pump_effort": 1.5743283048318315, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.8, "level": 2.4130185754776865, "pump_effort": 1.5274125970358656, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 0.9, "level": 2.448371554943157, "pump_effort": 1.4837542808513493, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.0, "level": 2.4814092907740686, "pump_effort": 1.4431183716634985, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.1, "level": 2.5122924506909117, "pump_effort": 1.405287679097531, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.2, "level": 2.541169984381139, "pump_effort": 1.3700613126433678, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.3, "level": 2.568180034006217, "pump_effort": 1.3372533722704725, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.4, "level": 2.593450766228936, "pump_effort": 1.3066917553851547, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.5, "level": 2.617101133780928, "pump_effort": 1.2782170700306281, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.6, "level": 2.63924157355065, "pump_effort": 1.2516816429083253, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.7, "level": 2.659974647310419, "pump_effort": 1.2269486124736193, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.8, "level": 2.6793956304741995, "pump_effort": 1.2038910985985123, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 1.9, "level": 2.6975930536602677, "pump_effort": 1.1823914413432304, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.0, "level": 2.7146492013043937, "pump_effort": 1.1623405022657929, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.1, "level": 2.7306405711138804, "pump_effort": 1.1436370224542634, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.2, "level": 2.745638297758255, "pump_effort": 1.1261870321142355, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.3, "level": 2.7597085438485442, "pump_effort": 1.1099033071026856, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.4, "level": 2.7729128609558784, "pump_effort": 1.094704868283765, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.5, "level": 2.7853085231550994, "pump_effort": 1.080516520004258, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.6, "level": 2.7969488353447933, "pump_effort": 1.0672684243561743, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.7, "level": 2.8078834183873, "pump_effort": 1.0548957082190737, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.8, "level": 2.818158472927144, "pump_effort": 1.0433381003618831, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 2.9, "level": 2.8278170235809608, "pump_effort": 1.0325395961384998, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.0, "level": 2.836899145043767, "pump_effort": 1.0224481475378457, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.1, "level": 2.845442171523239, "pump_effort": 1.0130153765510554, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.2, "level": 2.8534808907936524, "pump_effort": 1.0041963099992839, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.3, "level": 2.861047724052763, "pump_effort": 0.9959491341278328, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.4, "level": 2.8681728926668204, "pump_effort": 0.9882349674182758, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.5, "level": 2.874884572799959, "pump_effort": 0.9810176502018739, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.6, "level": 2.8812090388434015, "pump_effort": 0.9742635497765181, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.7, "level": 2.887170796486371, "pump_effort": 0.9679413798371582, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.8, "level": 2.8927927062035796, "pump_effort": 0.9620220331273743, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 3.9, "level": 2.898096097872996, "pump_effort": 0.9564784263085384, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.0, "level": 2.9031008771816675, "pump_effort": 0.9512853561238478, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.1, "level": 2.9078256244262293, "pump_effort": 0.9464193660081668, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.2, "level": 2.912287686267864, "pump_effort": 0.9418586223618415, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.3, "level": 2.9165032609584953, "pump_effort": 0.937582799768106, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.4, "level": 2.920487477515564, "pump_effort": 0.9335729744899217, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.5, "level": 2.9242544692864922, "pump_effort": 0.9298115256335687, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.6, "level": 2.9278174423106296, "pump_effort": 0.9262820434135282, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.7, "level": 2.9311887388558193, "pump_effort": 0.9229692439965129, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.8, "level": 2.934379896478496, "pump_effort": 0.91985889044229, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 4.9, "level": 2.9374017029302224, "pump_effort": 0.9169377192955244, "setpoint": 3.0, "leak": 0.0}
+{"event": "step", "time": 5.0, "level": 2.7902642472096013, "pump_effort": 0.9141933724165114, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.1, "level": 2.66695975371035, "pump_effort": 1.3691143336696214, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.2, "level": 2.5565597997833307, "pump_effort": 1.6085423707612356, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.3, "level": 2.4585171728356605, "pump_effort": 1.8386097490538766, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.4, "level": 2.3717886153309293, "pump_effort": 2.049411817328084, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.5, "level": 2.295435355999176, "pump_effort": 2.2429654321280617, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.6, "level": 2.228584864669318, "pump_effort": 2.4205248848186325, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.7, "level": 2.1704284436125283, "pump_effort": 2.5832938562429857, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.8, "level": 2.1202170688495197, "pump_effort": 2.732391205902871, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 5.9, "level": 2.0772575586917243, "pump_effort": 2.868858055692631, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 6.0, "level": 2.040908939711942, "pump_effort": 2.9936623334684223, "setpoint": 3.0, "leak": 3.0}
+{"event": "step", "time": 6.1, "level": 1.980079005304732, "pump_effort": 2.497703233264376, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.2, "level": 1.9391422086422914, "pump_effort": 2.8848404672409877, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.3, "level": 1.9038221276487275, "pump_effort": 2.989863812388985, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.4, "level": 1.8743121700131145, "pump_effort": 3.0996961523248, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.5, "level": 1.8500453065318618, "pump_effort": 3.1991903357374194, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.6, "level": 1.8305401490482123, "pump_effort": 3.2899787032189707, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.7, "level": 1.815350800386274, "pump_effort": 3.3727003047362563, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.8, "level": 1.8040668443853554, "pump_effort": 3.4479956532191083, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 6.9, "level": 1.7963106970324323, "pump_effort": 3.516454830340658, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.0, "level": 1.7917352571291514, "pump_effort": 3.578623781546887, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.1, "level": 1.7900216878071962, "pump_effort": 3.6350071910473485, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.2, "level": 1.7908773335152872, "pump_effort": 3.6860713747195737, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.3, "level": 1.7940337673254383, "pump_effort": 3.732247001597581, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.4, "level": 1.7992449637677206, "pump_effort": 3.773931657508947, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.5, "level": 1.8062855921680203, "pump_effort": 3.811492253803865, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.6, "level": 1.8149494252659755, "pump_effort": 3.8452672854368473, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.7, "level": 1.8250478577210818, "pump_effort": 3.875568943279983, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.8, "level": 1.8364085289916159, "pump_effort": 3.9026850861265645, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 7.9, "level": 1.848874045002061, "pump_effort": 3.926881078320488, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.0, "level": 1.86230079300288, "pump_effort": 3.9484014993095835, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.1, "level": 1.876557844070071, "pump_effort": 3.9674717316674277, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.2, "level": 1.8915259377861946, "pump_effort": 3.98429943426317, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.3, "level": 1.9070965437828196, "pump_effort": 3.9990759072926814, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.4, "level": 1.9231709949990174, "pump_effort": 4.0119773558297895, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.5, "level": 1.939659687713857, "pump_effort": 4.023166058427869, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.6, "level": 1.9564813436353177, "pump_effort": 4.032791447113855, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.7, "level": 1.973562329566817, "pump_effort": 4.040991104882547, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.8, "level": 1.9908360304195893, "pump_effort": 4.04789168653117, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 8.9, "level": 2.0082422715893515, "pump_effort": 4.053609768383372, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 9.0, "level": 2.025726786964788, "pump_effort": 4.05825263214739, "setpoint": 2.8, "leak": 3.0}
+{"event": "step", "time": 9.1, "level": 2.0127407290800234, "pump_effort": 3.4519189878426015, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.2, "level": 2.014159187620286, "pump_effort": 3.737724640418332, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.3, "level": 2.016167680941205, "pump_effort": 3.7497752475317667, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.4, "level": 2.0193877181653614, "pump_effort": 3.774359842062211, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.5, "level": 2.023648369454669, "pump_effort": 3.795738837802393, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.6, "level": 2.028834345758038, "pump_effort": 3.8149945026858925, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.7, "level": 2.0348378321045875, "pump_effort": 3.832255507777192, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.8, "level": 2.0415603532559126, "pump_effort": 3.8476891334356833, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 9.9, "level": 2.0489119098343096, "pump_effort": 3.8614470386654616, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.0, "level": 2.0568103226056684, "pump_effort": 3.87366929458988, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.1, "level": 2.0651806173868223, "pump_effort": 3.884485096723917, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.2, "level": 2.073954456356639, "pump_effort": 3.8940135942824727, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.3, "level": 2.083069612076838, "pump_effort": 3.9023646493363446, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.4, "level": 2.092469481244931, "pump_effort": 3.909639540541723, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.5, "level": 2.102102635347562, "pump_effort": 3.915931614695397, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.6, "level": 2.111922405556191, "pump_effort": 3.9213268897882183, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.7, "level": 2.121886499374001, "pump_effort": 3.925904612987152, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.8, "level": 2.131956646704021, "pump_effort": 3.9297377767736514, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 10.9, "level": 2.142098273162988, "pump_effort": 3.9328935962662004, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.0, "level": 2.1522801986129525, "pump_effort": 3.9354339505611704, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.1, "level": 2.162474359022747, "pump_effort": 3.937415790739596, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.2, "level": 2.1726555499040585, "pump_effort": 3.9388915170090395, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.3, "level": 2.1828011896919244, "pump_effort": 3.9399093272796972, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.4, "level": 2.19289110155709, "pump_effort": 3.9405135393128146, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.5, "level": 2.2029073122479788, "pump_effort": 3.940744888427328, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.6, "level": 2.21283386666323, "pump_effort": 3.9406408026074295, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.7, "level": 2.22265665695215, "pump_effort": 3.9402356567194032, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.8, "level": 2.2323632650302363, "pump_effort": 3.939561007420286, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 11.9, "level": 2.241942817480539, "pump_effort": 3.938645810223436, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 12.0, "level": 2.2513858518893324, "pump_effort": 3.9375166200765865, "setpoint": 2.5999999999999996, "leak": 3.0}
+{"event": "step", "time": 12.1, "level": 2.2301841937366627, "pump_effort": 3.3261977767060418, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.2, "level": 2.2232365194395145, "pump_effort": 3.6077365758860123, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.3, "level": 2.216771021376718, "pump_effort": 3.6162161146528113, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.4, "level": 2.211440278700543, "pump_effort": 3.637826383475216, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.5, "level": 2.207102053326305, "pump_effort": 3.656781099505918, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.6, "level": 2.2036667530892102, "pump_effort": 3.674109930286142, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.7, "level": 2.2010495853620453, "pump_effort": 3.689894267968728, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.8, "level": 2.1991726481847302, "pump_effort": 3.704257991645026, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 12.9, "level": 2.1979642790629406, "pump_effort": 3.7173130030405694, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.0, "level": 2.1973585945965093, "pump_effort": 3.7291629592754765, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.1, "level": 2.1972950549773866, "pump_effort": 3.7399037138231552, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.2, "level": 2.1977180602460207, "pump_effort": 3.7496238954652226, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.3, "level": 2.198576575694706, "pump_effort": 3.7584054370278968, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.4, "level": 2.1998237844643995, "pump_effort": 3.7663240671657388, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.5, "level": 2.201416765468889, "pump_effort": 3.7734497670821243, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.6, "level": 2.203316194894743, "pump_effort": 3.779847194564904, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.7, "level": 2.205486069633557, "pump_effort": 3.785576077547095, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.8, "level": 2.2078934511064974, "pump_effort": 3.7906915792748284, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 13.9, "level": 2.210508228039709, "pump_effort": 3.795244637039497, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.0, "level": 2.213302896842917, "pump_effort": 3.799282276310817, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.1, "level": 2.2162523583324094, "pump_effort": 3.8028479019922585, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.2, "level": 2.2193337296236897, "pump_effort": 3.8059815684103686, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.3, "level": 2.2225261700984777, "pump_effort": 3.8087202295448357, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.4, "level": 2.2258107204255433, "pump_effort": 3.811097970906828, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.5, "level": 2.229170153685212, "pump_effort": 3.813146224379142, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.6, "level": 2.2325888377134757, "pump_effort": 3.814893967242941, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.7, "level": 2.236052607843584, "pump_effort": 3.8163679065321445, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.8, "level": 2.2395486492810264, "pump_effort": 3.8175926497779047, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 14.9, "level": 2.2430653884020826, "pump_effort": 3.8185908631316337, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 15.0, "level": 2.2465923923168063, "pump_effort": 3.8193834177858035, "setpoint": 2.3999999999999995, "leak": 3.0}
+{"event": "step", "time": 15.1, "level": 2.219620276084649, "pump_effort": 3.2099895255468467, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.2, "level": 2.2070468940492614, "pump_effort": 3.4934518643538115, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.3, "level": 2.195098938883228, "pump_effort": 3.5038475495253536, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.4, "level": 2.184427427463362, "pump_effort": 3.527363086043905, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.5, "level": 2.1748883206098224, "pump_effort": 3.548208293764301, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.6, "level": 2.1663900485278025, "pump_effort": 3.5674096868745626, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.7, "level": 2.1588456887478626, "pump_effort": 3.5850458938406926, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.8, "level": 2.152175082367732, "pump_effort": 3.601238416661099, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 15.9, "level": 2.146304204980384, "pump_effort": 3.616097121903165, "setpoint": 2.1999999999999993, "leak": 3.0}
+{"event": "step", "time": 16.0, "level": 2.291164726048009, "pump_effort": 3.629723937436059, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.1, "level": 2.412558904514186, "pump_effort": 3.1847132605434374, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.2, "level": 2.521466034098047, "pump_effort": 2.9547633009868175, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.3, "level": 2.6184363616269204, "pump_effort": 2.733362788996514, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.4, "level": 2.7045042594217956, "pump_effort": 2.5304371179124043, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.5, "level": 2.7805897437795384, "pump_effort": 2.3439785390855654, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.6, "level": 2.8475400175333987, "pump_effort": 2.1727604966182343, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.7, "level": 2.906134286465305, "pump_effort": 2.0156181588377247, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.8, "level": 2.9570897626971013, "pump_effort": 1.8714789114726025, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 16.9, "level": 3.001066899003771, "pump_effort": 1.7393522635742638, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.0, "level": 3.038674079115448, "pump_effort": 1.618322985935863, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.1, "level": 3.0704718404616416, "pump_effort": 1.5075448779517298, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.2, "level": 3.096976694851529, "pump_effort": 1.406235182001743, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.3, "level": 3.1186645992291897, "pump_effort": 1.3136695454356984, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.4, "level": 3.135974119018185, "pump_effort": 1.229177456731144, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.5, "level": 3.1493093192506847, "pump_effort": 1.152138095790909, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.6, "level": 3.159042413021558, "pump_effort": 1.0819765489198707, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.7, "level": 3.1655161923641373, "pump_effort": 1.0181603471886722, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.8, "level": 3.16904626309814, "pump_effort": 0.9601962933136013, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 17.9, "level": 3.1699231023300505, "pump_effort": 0.907627547299266, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.0, "level": 3.1684139549328934, "pump_effort": 0.860030945221034, "setpoint": 2.1999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.1, "level": 3.1342645833797658, "pump_effort": 0.20701452889777308, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.2, "level": 3.1125669608901867, "pump_effort": 0.45124026699100944, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.3, "level": 3.0897885602900845, "pump_effort": 0.4265554148621079, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.4, "level": 3.0667792525937103, "pump_effort": 0.418703566158333, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.5, "level": 3.043579403474738, "pump_effort": 0.41161412601766634, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.6, "level": 3.0202660297552395, "pump_effort": 0.4060253955044716, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.7, "level": 2.9969063665712077, "pump_effort": 0.4017523660562344, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.8, "level": 2.973561061694932, "pump_effort": 0.3986726635602694, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 18.9, "level": 2.9502845634599617, "pump_effort": 0.3966708619203199, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.0, "level": 2.927125623604758, "pump_effort": 0.3956408235759553, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.1, "level": 2.9041277553777616, "pump_effort": 0.39548486372635827, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.2, "level": 2.8813296585082475, "pump_effort": 0.3961131407832568, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.3, "level": 2.8587656129193144, "pump_effort": 0.397443080239389, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.4, "level": 2.8364658434200942, "pump_effort": 0.39939883949071003, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.5, "level": 2.814456857427379, "pump_effort": 0.4019108102284311, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.6, "level": 2.7927617576231287, "pump_effort": 0.40491515583598636, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.7, "level": 2.7714005313197534, "pump_effort": 0.4083533813748679, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.8, "level": 2.7503903181805756, "pump_effort": 0.41217193391475443, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 19.9, "level": 2.729745657827531, "pump_effort": 0.4163218311198853, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.0, "level": 2.709478718761196, "pump_effort": 0.4207583161484633, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.1, "level": 2.6895995099190104, "pump_effort": 0.4254405370563629, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.2, "level": 2.670116076105416, "pump_effort": 0.43033124902063635, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.3, "level": 2.651034678442058, "pump_effort": 0.4353965378139621, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.4, "level": 2.6323599609066624, "pump_effort": 0.44060556306833915, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.5, "level": 2.614095103955229, "pump_effort": 0.4459303199658348, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.6, "level": 2.59624196615343, "pump_effort": 0.45134541808697665, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.7, "level": 2.5788012146790504, "pump_effort": 0.4568278762332702, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.8, "level": 2.5617724454977666, "pump_effort": 0.46235693212065687, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 20.9, "level": 2.5451542939590706, "pump_effort": 0.4679138659152415, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 21.0, "level": 2.52894453650748, "pump_effort": 0.4734818366520912, "setpoint": 1.9999999999999993, "leak": 0.0}
+{"event": "step", "time": 21.1, "level": 2.4891878976239274, "pump_effort": 0.0, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.2, "level": 2.4584496827548192, "pump_effort": 0.17409372178603919, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.3, "level": 2.4289325345944612, "pump_effort": 0.19362924337206877, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.4, "level": 2.4009697444193394, "pump_effort": 0.2199958462543132, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.5, "level": 2.3744480162257866, "pump_effort": 0.24431858139835222, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.6, "level": 2.3492848348966455, "pump_effort": 0.26719857499259897, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.7, "level": 2.3254015000289985, "pump_effort": 0.2887021490416387, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.8, "level": 2.30272427690569, "pump_effort": 0.3089188973139875, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 21.9, "level": 2.2811840030416675, "pump_effort": 0.32793101797098295, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.0, "level": 2.260715801387231, "pump_effort": 0.3458154162876571, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.1, "level": 2.241258806978375, "pump_effort": 0.3626439573175821, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.2, "level": 2.2227559110669275, "pump_effort": 0.3784837985407963, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.3, "level": 2.205153521409223, "pump_effort": 0.39339769631293525, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.4, "level": 2.1884013377509453, "pump_effort": 0.40744429330414106, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.5, "level": 2.1724521415834444, "pump_effort": 0.4206783877337219, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.6, "level": 2.157261599299556, "pump_effort": 0.4331511854987744, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.7, "level": 2.1427880779261366, "pump_effort": 0.44491053621796206, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.8, "level": 2.128992472657343, "pump_effort": 0.4560011541580238, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 22.9, "level": 2.1158380454571306, "pump_effort": 0.4664648249581194, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.0, "level": 2.1032902740416826, "pump_effort": 0.47634059901710507, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.1, "level": 2.091316710592543, "pump_effort": 0.48566497236115264, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.2, "level": 2.0798868495892586, "pump_effort": 0.4944720557634968, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.3, "level": 2.0689720041863664, "pump_effort": 0.5027937328447468, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.4, "level": 2.0585451905937293, "pump_effort": 0.5106598078408213, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.5, "level": 2.048581019951571, "pump_effort": 0.5180981436861533, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.6, "level": 2.039055597222168, "pump_effort": 0.5251347910224121, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.7, "level": 2.0299464266491256, "pump_effort": 0.5317941087073552, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.8, "level": 2.0212323233625322, "pump_effort": 0.5380988763646225, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 23.9, "level": 2.0128933307341557, "pump_effort": 0.5440703994832342, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.0, "level": 2.0049106431112547, "pump_effort": 0.5497286075450623, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.1, "level": 1.997266533580628, "pump_effort": 0.5550921456298258, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.2, "level": 1.9899442864362449, "pump_effort": 0.5601784599197741, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.3, "level": 1.9829281340442875, "pump_effort": 0.5650038775004838, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.4, "level": 1.9762031978187147, "pump_effort": 0.569583680829759, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.5, "level": 1.9697554330386309, "pump_effort": 0.5739321772235838, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.6, "level": 1.9635715772558213, "pump_effort": 0.5780627636863307, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.7, "level": 1.9576391020568902, "pump_effort": 0.5819879873918848, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.8, "level": 1.9519461679595456, "pump_effort": 0.5857196021030239, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 24.9, "level": 1.9464815822367636, "pump_effort": 0.5892686207981497, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.0, "level": 1.941234759475895, "pump_effort": 0.5926453647573124, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.1, "level": 1.9361956846922883, "pump_effort": 0.5958595093433415, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.2, "level": 1.9313548788287371, "pump_effort": 0.5989201266986788, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.3, "level": 1.9267033664830735, "pump_effort": 0.6018357255642884, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.4, "level": 1.9222326457165453, "pump_effort": 0.6046142884135748, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.5, "level": 1.9179346598052862, "pump_effort": 0.6072633060816682, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.6, "level": 1.9138017708062507, "pump_effort": 0.6097898100586528, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.7, "level": 1.909826734817467, "pump_effort": 0.6122004026041881, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.8, "level": 1.9060026788204032, "pump_effort": 0.6145012848306303, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 25.9, "level": 1.902323078999677, "pump_effort": 0.6166982828920178, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.0, "level": 1.89878174044229, "pump_effort": 0.6187968724071485, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.1, "level": 1.895372778125072, "pump_effort": 0.6208022012364688, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.2, "level": 1.8920905991051036, "pump_effort": 0.6227191107244823, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.3, "level": 1.8889298858335664, "pump_effort": 0.6245521555119141, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.4, "level": 1.8858855805187846, "pump_effort": 0.6263056220148793, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.5, "level": 1.882952870469186, "pump_effort": 0.6279835456617477, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.6, "level": 1.8801271743515433, "pump_effort": 0.6295897269723024, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.7, "level": 1.8774041293041905, "pump_effort": 0.6311277465580549, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.8, "level": 1.8747795788489507, "pump_effort": 0.6326009791172608, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 26.9, "level": 1.8722495615492865, "pump_effort": 0.63401260649318, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.0, "level": 1.8698103003657054, "pump_effort": 0.6353656298594685, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.1, "level": 1.8674581926627467, "pump_effort": 0.6366628810922621, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.2, "level": 1.8651898008249366, "pump_effort": 0.6379070333844198, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.3, "level": 1.8630018434419657, "pump_effort": 0.6391006111536446, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.4, "level": 1.8608911870260143, "pump_effort": 0.6402459992926487, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.5, "level": 1.8588548382266368, "pump_effort": 0.6413454518062314, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.6, "level": 1.8568899365109444, "pump_effort": 0.6424010998770806, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.7, "level": 1.8549937472789892, "pump_effort": 0.6434149593992331, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.8, "level": 1.8531636553862723, "pump_effort": 0.6443889380154565, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 27.9, "level": 1.8513971590471827, "pump_effort": 0.6453248416923387, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.0, "level": 1.8496918640949322, "pump_effort": 0.6462243808645312, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.1, "level": 1.8480454785751803, "pump_effort": 0.6470891761774463, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.2, "level": 1.846455807652081, "pump_effort": 0.6479207638556926, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.3, "level": 1.8449207488068926, "pump_effort": 0.6487206007226347, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.4, "level": 1.8434382873106303, "pump_effort": 0.6494900688947558, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.5, "level": 1.8420064919534649, "pump_effort": 0.6502304801728228, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.6, "level": 1.8406235110147313, "pump_effort": 0.6509430801503835, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.7, "level": 1.839287568458482, "pump_effort": 0.6516290520586823, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.8, "level": 1.8379969603405153, "pump_effort": 0.6522895203657726, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 28.9, "level": 1.8367500514137516, "pump_effort": 0.6529255541463974, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.0, "level": 1.8355452719196876, "pump_effort": 0.6535381702380343, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.1, "level": 1.8343811145544784, "pump_effort": 0.654128336197478, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.2, "level": 1.833256131598945, "pump_effort": 0.6546969730713179, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.3, "level": 1.8321689322025143, "pump_effort": 0.6552449579927613, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.4, "level": 1.8311181798117477, "pump_effort": 0.6557731266163945, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.5, "level": 1.8301025897347338, "pump_effort": 0.656282275401676, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.6, "level": 1.8291209268331818, "pump_effort": 0.6567731637552144, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.7, "level": 1.8281720033345912, "pump_effort": 0.6572465160411974, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.8, "level": 1.8272546767573619, "pump_effort": 0.6577030234686878, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "step", "time": 29.9, "level": 1.8263678479421754, "pump_effort": 0.658143345863917, "setpoint": 1.7999999999999994, "leak": 0.0}
+{"event": "supervisor_decision", "time_s": 3.0, "water_level_m": 2.837, "pump_effort": 1.022, "adjusted_setpoint": 3.0, "anomaly_flag": false, "diagnosis": "Nominal operation, no action."}
+{"event": "supervisor_decision", "time_s": 6.0, "water_level_m": 2.041, "pump_effort": 2.994, "adjusted_setpoint": 2.8, "anomaly_flag": true, "diagnosis": "Anomaly detected: effort 2.33, error 0.70, lowering setpoint by 0.20."}
+{"event": "supervisor_decision", "time_s": 9.0, "water_level_m": 2.026, "pump_effort": 4.058, "adjusted_setpoint": 2.5999999999999996, "anomaly_flag": true, "diagnosis": "Anomaly detected: effort 4.03, error 0.85, lowering setpoint by 0.20."}
+{"event": "supervisor_decision", "time_s": 12.0, "water_level_m": 2.251, "pump_effort": 3.938, "adjusted_setpoint": 2.3999999999999995, "anomaly_flag": true, "diagnosis": "Anomaly detected: effort 3.94, error 0.40, lowering setpoint by 0.20."}
+{"event": "supervisor_decision", "time_s": 15.0, "water_level_m": 2.247, "pump_effort": 3.819, "adjusted_setpoint": 2.1999999999999993, "anomaly_flag": true, "diagnosis": "Anomaly detected: effort 3.81, error 0.17, lowering setpoint by 0.20."}
+{"event": "supervisor_decision", "time_s": 18.0, "water_level_m": 3.168, "pump_effort": 0.86, "adjusted_setpoint": 1.9999999999999993, "anomaly_flag": true, "diagnosis": "Anomaly detected: effort 1.11, error 0.94, lowering setpoint by 0.20."}
+{"event": "supervisor_decision", "time_s": 21.0, "water_level_m": 2.529, "pump_effort": 0.473, "adjusted_setpoint": 1.7999999999999994, "anomaly_flag": true, "diagnosis": "Anomaly detected: effort 0.45, error 0.61, lowering setpoint by 0.20."}
+{"event": "supervisor_decision", "time_s": 24.0, "water_level_m": 2.005, "pump_effort": 0.55, "adjusted_setpoint": 1.7999999999999994, "anomaly_flag": false, "diagnosis": "Nominal operation, no action."}
+{"event": "supervisor_decision", "time_s": 27.0, "water_level_m": 1.87, "pump_effort": 0.635, "adjusted_setpoint": 1.7999999999999994, "anomaly_flag": false, "diagnosis": "Nominal operation, no action."}
+{"event": "failure_point", "time_s": 5.0, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.1, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.2, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.3, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.4, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.5, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.6, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.7, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.8, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 5.9, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 6.0, "type": "missed_anomaly", "detail": "fault active, last anomaly_flag=False"}
+{"event": "failure_point", "time_s": 16.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 16.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 17.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 18.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 19.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 20.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 21.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 22.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.1, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.2, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.3, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.4, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.5, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.6, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.7, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.8, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 23.9, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}
+{"event": "failure_point", "time_s": 24.0, "type": "false_positive", "detail": "no fault, last anomaly_flag=True"}

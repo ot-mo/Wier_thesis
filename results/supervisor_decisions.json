@@ -11,64 +11,64 @@
     "time_s": 6.0,
     "water_level_m": 2.041,
     "pump_effort": 2.994,
-    "adjusted_setpoint": 2.5,
+    "adjusted_setpoint": 2.8,
     "anomaly_flag": true,
-    "diagnosis": "Anomaly detected: effort 2.86 vs baseline 0.96, lowering setpoint by 0.50."
+    "diagnosis": "Anomaly detected: effort 2.33, error 0.70, lowering setpoint by 0.20."
   },
   {
     "time_s": 9.0,
-    "water_level_m": 1.712,
-    "pump_effort": 3.968,
-    "adjusted_setpoint": 2.2479999999999998,
+    "water_level_m": 2.026,
+    "pump_effort": 4.058,
+    "adjusted_setpoint": 2.5999999999999996,
     "anomaly_flag": true,
-    "diagnosis": "Anomaly detected: effort 3.96 vs baseline 3.12, lowering setpoint by 0.25."
+    "diagnosis": "Anomaly detected: effort 4.03, error 0.85, lowering setpoint by 0.20."
   },
   {
     "time_s": 12.0,
-    "water_level_m": 1.878,
-    "pump_effort": 3.873,
-    "adjusted_setpoint": 2.2479999999999998,
-    "anomaly_flag": false,
-    "diagnosis": "Nominal operation, no action."
+    "water_level_m": 2.251,
+    "pump_effort": 3.938,
+    "adjusted_setpoint": 2.3999999999999995,
+    "anomaly_flag": true,
+    "diagnosis": "Anomaly detected: effort 3.94, error 0.40, lowering setpoint by 0.20."
   },
   {
     "time_s": 15.0,
-    "water_level_m": 2.093,
-    "pump_effort": 3.82,
-    "adjusted_setpoint": 2.2479999999999998,
-    "anomaly_flag": false,
-    "diagnosis": "Nominal operation, no action."
+    "water_level_m": 2.247,
+    "pump_effort": 3.819,
+    "adjusted_setpoint": 2.1999999999999993,
+    "anomaly_flag": true,
+    "diagnosis": "Anomaly detected: effort 3.81, error 0.17, lowering setpoint by 0.20."
   },
   {
     "time_s": 18.0,
-    "water_level_m": 3.235,
-    "pump_effort": 0.889,
-    "adjusted_setpoint": 2.2479999999999998,
-    "anomaly_flag": false,
-    "diagnosis": "Nominal operation, no action."
+    "water_level_m": 3.168,
+    "pump_effort": 0.86,
+    "adjusted_setpoint": 1.9999999999999993,
+    "anomaly_flag": true,
+    "diagnosis": "Anomaly detected: effort 1.11, error 0.94, lowering setpoint by 0.20."
   },
   {
     "time_s": 21.0,
-    "water_level_m": 2.805,
-    "pump_effort": 0.528,
-    "adjusted_setpoint": 2.2479999999999998,
-    "anomaly_flag": false,
-    "diagnosis": "Nominal operation, no action."
+    "water_level_m": 2.529,
+    "pump_effort": 0.473,
+    "adjusted_setpoint": 1.7999999999999994,
+    "anomaly_flag": true,
+    "diagnosis": "Anomaly detected: effort 0.45, error 0.61, lowering setpoint by 0.20."
   },
   {
     "time_s": 24.0,
-    "water_level_m": 2.471,
-    "pump_effort": 0.642,
-    "adjusted_setpoint": 2.2479999999999998,
+    "water_level_m": 2.005,
+    "pump_effort": 0.55,
+    "adjusted_setpoint": 1.7999999999999994,
     "anomaly_flag": false,
     "diagnosis": "Nominal operation, no action."
   },
   {
     "time_s": 27.0,
-    "water_level_m": 2.332,
-    "pump_effort": 0.708,
-    "adjusted_setpoint": 2.4979999999999998,
+    "water_level_m": 1.87,
+    "pump_effort": 0.635,
+    "adjusted_setpoint": 1.7999999999999994,
     "anomaly_flag": false,
-    "diagnosis": "System stable and below nominal, restoring setpoint toward nominal."
+    "diagnosis": "Nominal operation, no action."
   }
 ]

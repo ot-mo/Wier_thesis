@@ -42,10 +42,19 @@ SAFE_BUILTINS = {
     "abs": abs, "min": min, "max": max, "len": len, "round": round,
     "sum": sum, "sorted": sorted, "range": range, "enumerate": enumerate,
     "zip": zip, "map": map, "filter": filter, "all": all, "any": any,
-    "pow": pow, "divmod": divmod,
+    "pow": pow, "divmod": divmod, "isinstance": isinstance,
     "float": float, "int": int, "bool": bool, "str": str, "list": list,
     "dict": dict, "tuple": tuple, "set": set,
     "True": True, "False": False, "None": None,
+    # try/except is permitted by check_source, so the exception types it would
+    # reasonably catch must be resolvable at runtime too, or a candidate that
+    # defensively guards against e.g. a malformed telemetry value throws a
+    # NameError on the guard itself instead of being protected by it.
+    "TypeError": TypeError, "ValueError": ValueError, "KeyError": KeyError,
+    "IndexError": IndexError, "ZeroDivisionError": ZeroDivisionError,
+    "AttributeError": AttributeError, "ArithmeticError": ArithmeticError,
+    "StopIteration": StopIteration, "RuntimeError": RuntimeError,
+    "Exception": Exception,
 }
 SAFE_GLOBALS_TEMPLATE = {"__builtins__": SAFE_BUILTINS, "math": math, "statistics": statistics}
 

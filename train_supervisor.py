@@ -35,7 +35,7 @@ TRIALS_PATH = os.path.join(RESULTS_DIR, "supervisor_training_trials.jsonl")
 
 VIOLATION_PENALTY = 500
 MISSED_ANOMALY_PENALTY = 300
-FALSE_POSITIVE_PENALTY = 100
+FALSE_POSITIVE_PENALTY = 160
 EXCEPTION_PENALTY = 10000
 
 SCENARIO_BATTERY = [
@@ -141,7 +141,7 @@ def call_deepseek(prompt, max_retries=3):
         try:
             time.sleep(0.3)
             response = client.chat.completions.create(
-                model="deepseek-chat",
+                model="deepseek-v4-pro",
                 messages=[
                     {"role": "system", "content": "You are a control-systems engineer. Respond ONLY with valid JSON."},
                     {"role": "user", "content": prompt},

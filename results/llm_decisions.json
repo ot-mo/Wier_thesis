@@ -1,0 +1,74 @@
+[
+  {
+    "time_s": 3.0,
+    "water_level_m": 2.842,
+    "pump_effort": 1.01,
+    "adjusted_setpoint": 3.0,
+    "anomaly_flag": false,
+    "diagnosis": "Water level is rising steadily toward the 3.0 m target with error monotonically decreasing from 0.83 to 0.16. Pump effort is decreasing from 1.74 to 1.01, indicating the controller is reducing actuation as the level approaches setpoint. No leak or anomaly is present; the system is converging and stabilizing. Active setpoint is already at nominal 3.0 m, so it is maintained."
+  },
+  {
+    "time_s": 6.0,
+    "water_level_m": 2.04,
+    "pump_effort": 2.993,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": true,
+    "diagnosis": "Anomaly detected: water level dropped sharply from 2.94 m to 2.04 m while pump effort increased from 0.91 to 2.99, indicating a likely leak or major disturbance. Safely lowering the setpoint to reduce system stress."
+  },
+  {
+    "time_s": 9.0,
+    "water_level_m": 1.711,
+    "pump_effort": 3.968,
+    "adjusted_setpoint": 2.0,
+    "anomaly_flag": true,
+    "diagnosis": "System shows a leak/anomaly: pump effort is very high (up to 3.97) while water level dropped from 1.93 m to a minimum of 1.55 m, then only slowly recovered to 1.71 m. Error remains large (~0.79-0.95 m) relative to the active setpoint of 2.5 m. High pump effort with depressed level indicates abnormal loss of water, so the setpoint should be safely lowered to reduce stress on the pump and system."
+  },
+  {
+    "time_s": 12.0,
+    "water_level_m": 1.618,
+    "pump_effort": 3.798,
+    "adjusted_setpoint": 2.2,
+    "anomaly_flag": false,
+    "diagnosis": "System is recovering from a low-level condition. Pump effort peaked around 3.8 and is now plateauing, while the water level has risen from 1.52 m to 1.62 m and the error has decreased from 0.48 to 0.38. No leak or anomaly is evident; the system is stabilizing toward the active setpoint of 2.0 m. Since recovery is underway, the setpoint can be gradually restored toward the nominal 3.0 m."
+  },
+  {
+    "time_s": 15.0,
+    "water_level_m": 2.039,
+    "pump_effort": 3.838,
+    "adjusted_setpoint": 2.2,
+    "anomaly_flag": false,
+    "diagnosis": "Water level is steadily rising toward the active setpoint of 2.2 m with error monotonically decreasing from 0.54 to 0.16. Pump effort is high but gradually declining (4.41 to 3.84), consistent with normal filling dynamics rather than a leak. No anomaly detected; system is converging on the current setpoint."
+  },
+  {
+    "time_s": 18.0,
+    "water_level_m": 3.191,
+    "pump_effort": 0.881,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": false,
+    "diagnosis": "System has recovered and stabilized. Water level rose from 2.05 m to 3.19 m and is holding steady, error is near zero (-0.99 relative to the current active setpoint of 2.2 m, indicating the level is above the active setpoint), and pump effort has steadily decreased from 3.83 to 0.88, showing no leak or anomaly. Since the system is stabilized with low pump effort, the setpoint should be gradually restored toward the nominal 3.0 m."
+  },
+  {
+    "time_s": 21.0,
+    "water_level_m": 3.078,
+    "pump_effort": 0.597,
+    "adjusted_setpoint": 2.7,
+    "anomaly_flag": false,
+    "diagnosis": "Water level is above the active setpoint (2.5 m) and above nominal (3.0 m), with error around -0.6 to -0.8 m. Pump effort has steadily decreased from 1.75 to 0.6, indicating the controller is reducing pump output as the level falls toward the target. No leak or anomaly is present: level is not dropping with high pump effort, and pump effort is low. The system is stabilizing/recovering, so the setpoint should be gradually restored toward nominal 3.0 m."
+  },
+  {
+    "time_s": 24.0,
+    "water_level_m": 2.956,
+    "pump_effort": 0.726,
+    "adjusted_setpoint": 2.85,
+    "anomaly_flag": false,
+    "diagnosis": "System is recovering from a prior high-level condition. Water level has descended from 3.10 m to 2.96 m, crossing the active setpoint of 2.7 m is not yet reached; error is negative (level above setpoint) and shrinking toward zero. Pump effort has steadily decreased from 1.21 to 0.73, indicating reduced actuator stress and no evidence of a leak or runaway drop. The system is stabilizing near the nominal target of 3.0 m, so the setpoint should be gradually restored toward nominal."
+  },
+  {
+    "time_s": 27.0,
+    "water_level_m": 2.964,
+    "pump_effort": 0.809,
+    "adjusted_setpoint": 2.9,
+    "anomaly_flag": false,
+    "diagnosis": "System is stable and recovered: water level is near the active setpoint (2.85 m) with small error around -0.12 to -0.15 m, and pump effort has steadily decreased from 1.18 to 0.81, indicating no leak or anomaly. Since the system has stabilized with low pump effort and no leak, the setpoint should be gradually restored toward the nominal 3.0 m. Adjusting setpoint upward by a small increment to 2.90 m."
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "time_s": 3.0,
+    "water_level_m": 2.837,
+    "pump_effort": 1.022,
+    "adjusted_setpoint": 3.0,
+    "anomaly_flag": false,
+    "diagnosis": "Nominal operation, no action."
+  },
+  {
+    "time_s": 6.0,
+    "water_level_m": 2.041,
+    "pump_effort": 2.994,
+    "adjusted_setpoint": 3.0,
+    "anomaly_flag": false,
+    "diagnosis": "Nominal operation, no action."
+  },
+  {
+    "time_s": 9.0,
+    "water_level_m": 2.236,
+    "pump_effort": 4.116,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": true,
+    "diagnosis": "Anomaly suspected: high pump effort with growing tracking error, lowering setpoint."
+  },
+  {
+    "time_s": 12.0,
+    "water_level_m": 2.148,
+    "pump_effort": 3.883,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": false,
+    "diagnosis": "Nominal operation, no action."
+  },
+  {
+    "time_s": 15.0,
+    "water_level_m": 2.344,
+    "pump_effort": 3.861,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": false,
+    "diagnosis": "Nominal operation, no action."
+  },
+  {
+    "time_s": 18.0,
+    "water_level_m": 3.489,
+    "pump_effort": 0.924,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": false,
+    "diagnosis": "Nominal operation, no action."
+  },
+  {
+    "time_s": 21.0,
+    "water_level_m": 3.058,
+    "pump_effort": 0.563,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": false,
+    "diagnosis": "Nominal operation, no action."
+  },
+  {
+    "time_s": 24.0,
+    "water_level_m": 2.723,
+    "pump_effort": 0.68,
+    "adjusted_setpoint": 2.5,
+    "anomaly_flag": false,
+    "diagnosis": "Nominal operation, no action."
+  },
+  {
+    "time_s": 27.0,
+    "water_level_m": 2.583,
+    "pump_effort": 0.748,
+    "adjusted_setpoint": 2.75,
+    "anomaly_flag": false,
+    "diagnosis": "System stable and below nominal, restoring setpoint toward nominal."
+  }
+]

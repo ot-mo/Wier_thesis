@@ -1,0 +1,10 @@
+time_s,water_level_m,pump_effort,adjusted_setpoint,anomaly_flag,diagnosis
+3.0,2.837,1.022,3.0,False,"Nominal operation, no action."
+6.0,2.041,2.994,3.0,False,"Nominal operation, no action."
+9.0,2.236,4.116,2.5,True,"Anomaly suspected: high pump effort with growing tracking error, lowering setpoint."
+12.0,2.148,3.883,2.5,False,"Nominal operation, no action."
+15.0,2.344,3.861,2.5,False,"Nominal operation, no action."
+18.0,3.489,0.924,2.5,False,"Nominal operation, no action."
+21.0,3.058,0.563,2.5,False,"Nominal operation, no action."
+24.0,2.723,0.68,2.5,False,"Nominal operation, no action."
+27.0,2.583,0.748,2.75,False,"System stable and below nominal, restoring setpoint toward nominal."

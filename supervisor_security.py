@@ -59,8 +59,13 @@ SAFE_BUILTINS = {
 SAFE_GLOBALS_TEMPLATE = {"__builtins__": SAFE_BUILTINS, "math": math, "statistics": statistics}
 
 
-def check_source(source: str) -> tuple:
-    """Static AST check. Returns (ok, reason_if_rejected)."""
+def check_source(source: str, required_args: tuple = REQUIRED_FUNC_ARGS) -> tuple:
+    """Static AST check. Returns (ok, reason_if_rejected).
+
+    required_args lets callers validate against a different supervise()
+    signature (e.g. the MIMO two-tank interface) while reusing the same
+    import/attribute/name denylist.
+    """
     if len(source) > MAX_SOURCE_CHARS:
         return False, f"source too large ({len(source)} chars > {MAX_SOURCE_CHARS})"
 
@@ -84,8 +89,8 @@ def check_source(source: str) -> tuple:
 
     fn = supervise_defs[0]
     arg_names = tuple(a.arg for a in fn.args.args)
-    if arg_names != REQUIRED_FUNC_ARGS:
-        return False, f"def {REQUIRED_FUNC_NAME} must have args {REQUIRED_FUNC_ARGS}, found {arg_names}"
+    if arg_names != required_args:
+        return False, f"def {REQUIRED_FUNC_NAME} must have args {required_args}, found {arg_names}"
 
     for node in ast.walk(tree):
         if isinstance(node, (ast.Import, ast.ImportFrom)):

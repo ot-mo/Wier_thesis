@@ -83,33 +83,32 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
             return xs
         return xs[len(xs) - kk:]
 
-    def frac_rel(effs, errs, ref, eff_margin, err_margin, win):
-        seg_e = tail(effs, win)
-        seg_r = tail(errs, win)
-        m = len(seg_e)
+    def frac_over(xs, bar, win):
+        seg = tail(xs, win)
+        m = len(seg)
         if m <= 0:
             return 0.0
-        bar = ref + eff_margin
         cnt = 0
-        for i in range(m):
-            if seg_e[i] > bar and abs(seg_r[i]) > err_margin:
+        for x in seg:
+            if x > bar:
                 cnt += 1
         return cnt / float(m)
 
-    def frac_abs(effs, errs, eff_bar, err_bar, win):
-        seg_e = tail(effs, win)
-        seg_r = tail(errs, win)
-        m = len(seg_e)
+    def frac_pair(effs, errs, eff_bar, err_bar, win):
+        se = tail(effs, win)
+        sr = tail(errs, win)
+        m = len(se)
         if m <= 0:
             return 0.0
         cnt = 0
         for i in range(m):
-            if seg_e[i] > eff_bar and abs(seg_r[i]) > err_bar:
+            if se[i] > eff_bar and abs(sr[i]) > err_bar:
                 cnt += 1
         return cnt / float(m)
 
     k = min(8, n)
     w = min(10, n)
+    wmed = min(12, n)
     wlong = min(16, n)
 
     te1 = mean(tail(eff1, k))
@@ -117,54 +116,55 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
     ae1 = mean_abs(tail(err1, k))
     ae2 = mean_abs(tail(err2, k))
 
-    # Contamination-resistant healthy reference: a low quantile of the whole
-    # window stays near the pre-fault operating point even when a persistent
-    # fault fills most of the window (an early-mean baseline would be dragged
-    # up to fault level and hide the fault entirely).
+    # Contamination-resistant healthy reference: a low quantile stays near the
+    # pre-fault operating point even when a persistent fault fills most of the
+    # window (an early mean would be dragged up to fault level).
     ref1 = quantile(eff1, 0.20)
     ref2 = quantile(eff2, 0.20)
 
     dev1 = te1 - ref1
     dev2 = te2 - ref2
 
+    # Persistence of elevated effort relative to the healthy reference. This is
+    # deliberately ERROR-INDEPENDENT: a leak/actuator fault leaves effort high
+    # while the tank's own PID nulls the steady-state error.
+    M1 = 0.32
+    M2 = 0.26
+    obs1 = frac_over(eff1, ref1 + M1, wlong)
+    obs2 = frac_over(eff2, ref2 + M2, wlong)
+
     # ---- Tank 1: high-head source, larger absolute effort scale ----
     spike1 = (te1 > 3.4) and (ae1 > 0.22)
-    abs1 = (te1 > 2.5) and (ae1 > 0.22)
-    dev1_hi = (dev1 > 0.55) and (ae1 > 0.16)
-    sig1 = frac_rel(eff1, err1, ref1, 0.45, 0.14, w)
-    sust1 = sig1 >= 0.5
-    raw1 = spike1 or abs1 or dev1_hi or sust1
+    abs1 = (te1 > 2.5) and (ae1 > 0.18)
+    dev1_hi = (dev1 > 0.55) and (ae1 > 0.14)
+    sust1 = frac_pair(eff1, err1, ref1 + 0.45, 0.14, w) >= 0.5
+    eff_sust1 = (obs1 >= 0.60) and (dev1 > 0.20)
+    raw1 = spike1 or abs1 or dev1_hi or sust1 or eff_sust1
 
     # ---- Tank 2: gravity-fed, lower baseline, softer absolute scale ----
-    spike2 = (te2 > 2.9) and (ae2 > 0.30)
-    abs2 = (te2 > 2.0) and (ae2 > 0.20)
-    dev2_hi = (dev2 > 0.45) and (ae2 > 0.14)
-    sig2 = frac_rel(eff2, err2, ref2, 0.40, 0.12, w)
-    sust2 = sig2 >= 0.5
-    raw2 = spike2 or abs2 or dev2_hi or sust2
+    spike2 = (te2 > 2.9) and (ae2 > 0.28)
+    abs2 = (te2 > 2.0) and (ae2 > 0.18)
+    dev2_hi = (dev2 > 0.45) and (ae2 > 0.12)
+    sust2 = frac_pair(eff2, err2, ref2 + 0.40, 0.12, w) >= 0.5
+    eff_sust2 = (obs2 >= 0.60) and (dev2 > 0.16)
+    raw2 = spike2 or abs2 or dev2_hi or sust2 or eff_sust2
 
-    # Long, organised tank2 signature measured ABSOLUTELY, so it can survive
-    # cascade suppression only when it is genuinely a tank2 fault.
-    t2_long = frac_abs(eff2, err2, 2.0, 0.20, wlong) > 0.6
-
-    # ---- Recovery: only when recent effort is back at the healthy reference
-    # (an absolute reference, so a fault plateau is never called recovered).
-    h = k // 3
-    if h < 3:
-        h = 3
-    if h > k:
-        h = k
-    rec1 = (k >= 4) and (mean(tail(eff1, h)) <= ref1 + 0.55) and (mean_abs(tail(err1, h)) <= 0.16)
-    rec2 = (k >= 4) and (mean(tail(eff2, h)) <= ref2 + 0.45) and (mean_abs(tail(err2, h)) <= 0.14)
+    # ---- Recovery: recent effort must sit essentially AT the healthy
+    # reference for most of a window. Margins are strictly tighter than the
+    # detection margins, so a persistent plateau is never called recovered,
+    # while a genuinely cleared fault restores cleanly.
+    rec1 = (frac_over(eff1, ref1 + 0.20, wmed) <= 0.20) and (ae1 <= 0.14)
+    rec2 = (frac_over(eff2, ref2 + 0.16, wmed) <= 0.20) and (ae2 <= 0.12)
 
     tank1_anom = bool(raw1 and not rec1)
 
     # ---- Cascade coupling: tank1 hydraulically feeds tank2, so an upstream
-    # fault perturbs tank2 even when tank2 itself is healthy. Suppress tank2's
-    # own evidence whenever ANY upstream tank1 signature is present, unless
-    # tank2 shows an unambiguous spike or a long organised signature.
-    upstream1 = bool(raw1 or (dev1 > 0.40) or (te1 > 2.2))
-    cascade = bool(upstream1 and raw2 and (not spike2) and (not t2_long))
+    # fault perturbs tank2 even when tank2 is healthy. Suppress tank2's own
+    # evidence while upstream tank1 is active UNLESS tank2 shows a large, long
+    # DEVIATION-INDEPENDENT signature of its own (a real simultaneous fault).
+    upstream1 = bool(raw1 or (dev1 > 0.35) or (te1 > 2.2))
+    strong2 = bool(spike2 or ((obs2 >= 0.80) and (dev2 > 0.55)))
+    cascade = bool(upstream1 and raw2 and (not strong2))
     tank2_anom = bool(raw2 and not rec2 and not cascade)
 
     LOWER_STEP = 0.3
@@ -176,7 +176,7 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
         if cand1 > t1_sp:
             cand1 = t1_sp
         new1 = cand1
-        diag1 = 'tank1 anomaly suspected (sustained effort/error above healthy reference)'
+        diag1 = 'tank1 anomaly suspected (sustained effort above healthy reference)'
     elif (dev1 < 0.30) and (ae1 < 0.16) and (t1_sp < nom1):
         new1 = min(nom1, t1_sp + RESTORE_STEP)
         diag1 = 'tank1 stable, restoring toward nominal'

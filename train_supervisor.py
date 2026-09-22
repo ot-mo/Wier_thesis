@@ -37,6 +37,7 @@ VIOLATION_PENALTY = 500
 MISSED_ANOMALY_PENALTY = 300
 FALSE_POSITIVE_PENALTY = 160
 EXCEPTION_PENALTY = 10000
+RESTORE_GAP_PENALTY = 200
 
 SCENARIO_BATTERY = [
     ScenarioConfig(name="baseline_no_fault", leak_onset_s=None, leak_offset_s=None),
@@ -63,6 +64,7 @@ def score_supervisor(supervisor_fn):
             + m["missed_anomaly_count"] * MISSED_ANOMALY_PENALTY
             + m["false_positive_count"] * FALSE_POSITIVE_PENALTY
             + m["exception_count"] * EXCEPTION_PENALTY
+            + m["restore_gap"] * RESTORE_GAP_PENALTY
         )
         total += scenario_score
         traces.append({"scenario": scenario.name, "score": round(scenario_score, 3), "log_report": build_log_report(result)})
@@ -110,7 +112,8 @@ Current supervisor source:
 ```
 
 Current average score across the fixed scenario battery ({scenario_names}): {best_score}
-(Lower score is better. Score = IAE + violation_count*{VIOLATION_PENALTY} + missed_anomaly_count*{MISSED_ANOMALY_PENALTY} + false_positive_count*{FALSE_POSITIVE_PENALTY} + exception_count*{EXCEPTION_PENALTY})
+(Lower score is better. Score = IAE + violation_count*{VIOLATION_PENALTY} + missed_anomaly_count*{MISSED_ANOMALY_PENALTY} + false_positive_count*{FALSE_POSITIVE_PENALTY} + exception_count*{EXCEPTION_PENALTY} + restore_gap*{RESTORE_GAP_PENALTY})
+(restore_gap is |final_setpoint - nominal_target| measured only in scenarios where the fault has fully cleared by the end of the run - it penalizes leaving the setpoint lowered after a fault is no longer present, and is 0 for scenarios whose fault never clears.)
 
 Per-scenario results with the current supervisor:
 {json.dumps(traces, indent=2)}
@@ -120,7 +123,7 @@ Aggregate failure-point catalog from past runs (counts and worst examples):
 
 Task:
 1. Diagnose what is causing the worst-scoring scenarios and/or the most common failure-point categories.
-2. Propose an improved `supervise` function that reduces missed anomalies and false positives without introducing new safety violations.
+2. Propose an improved `supervise` function that reduces missed anomalies and false positives without introducing new safety violations, and that restores the setpoint back toward nominal_target once a fault has genuinely cleared.
 
 You must output strictly JSON matching this structure:
 {{
@@ -141,7 +144,7 @@ def call_deepseek(prompt, max_retries=3):
         try:
             time.sleep(0.3)
             response = client.chat.completions.create(
-                model="deepseek-v4-pro",
+                model="deepseek-flash",
                 messages=[
                     {"role": "system", "content": "You are a control-systems engineer. Respond ONLY with valid JSON."},
                     {"role": "user", "content": prompt},

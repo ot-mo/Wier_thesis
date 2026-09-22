@@ -182,6 +182,12 @@ def run_episode(supervisor_fn: Callable, scenario: ScenarioConfig) -> dict:
     false_positive_count = sum(1 for f in failure_points if f["type"] == "false_positive")
     exception_count = sum(1 for f in failure_points if f["type"] in ("exception", "timeout"))
 
+    # Only meaningful when the fault has actually cleared by episode end (or never
+    # occurred) - a scenario whose leak never turns off shouldn't be penalized for
+    # leaving the setpoint lowered, since that's the correct response there.
+    fault_active_at_end = bool(leak_hist and leak_hist[-1] != 0.0)
+    restore_gap = 0.0 if fault_active_at_end else abs(active_setpoint - scenario.nominal_setpoint)
+
     return {
         "scenario": scenario.name,
         "time_hist": time_hist,
@@ -197,5 +203,6 @@ def run_episode(supervisor_fn: Callable, scenario: ScenarioConfig) -> dict:
             "missed_anomaly_count": missed_anomaly_count,
             "false_positive_count": false_positive_count,
             "exception_count": exception_count,
+            "restore_gap": round(restore_gap, 3),
         },
     }

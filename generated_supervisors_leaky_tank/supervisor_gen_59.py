@@ -60,10 +60,9 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
     r_short = errors[-short_n:]
 
     med_effort_short = med(e_short)
-    med_error_short = med(r_short)
-    err_slope = linear_slope(r_short)
+    med_effort_mid = med(e_mid)
+    med_effort_long = med(e_long)
 
-    # expected effort for the current operating point (hydraulic sqrt model)
     if nominal_target and nominal_target > 0.0:
         ratio = active_setpoint / nominal_target
         ratio = max(0.1, min(1.5, ratio))
@@ -71,9 +70,7 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
     else:
         base_effort = 0.923
 
-    # only a small allowance for a genuine steady-state offset: a PI level
-    # loop removes it, so it must never be used to cancel a real leak.
-    expected_effort = base_effort + 0.4 * max(0.0, -med_error_short)
+    expected_effort = base_effort
 
     dev_short = [x - expected_effort for x in e_short]
     dev_mid = [x - expected_effort for x in e_mid]
@@ -84,49 +81,50 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
     med_dev_long = med(dev_long)
     max_dev_short = max(dev_short) if dev_short else 0.0
 
-    mad = med([abs(x - med_effort_short) for x in e_short])
+    mad = med([abs(x - med_effort_long) for x in e_long])
     sigma = max(0.02, 1.4826 * mad)
 
-    t_mild = max(0.09, 3.0 * sigma)
-    t_mod = max(0.18, 4.5 * sigma)
-    t_sev = max(0.45, 7.0 * sigma)
+    t_low = max(0.05, 2.0 * sigma)
+    t_mild = max(0.10, 3.5 * sigma)
+    t_mod = max(0.20, 5.0 * sigma)
+    t_sev = max(0.45, 8.0 * sigma)
 
-    frac_short = sum(1 for d in dev_short if d > 0.7 * t_mild) / float(short_n)
-    frac_mid = sum(1 for d in dev_mid if d > 0.7 * t_mild) / float(mid_n)
-    frac_long = sum(1 for d in dev_long if d > 0.7 * t_mild) / float(long_n)
+    frac_short = sum(1 for d in dev_short if d > t_low) / float(short_n)
+    frac_mid = sum(1 for d in dev_mid if d > t_low) / float(mid_n)
+    frac_long = sum(1 for d in dev_long if d > t_low) / float(long_n)
 
-    # the loop is actively refilling the tank (level below target and rising):
-    # high effort is expected and must not be reported as a leak
-    refilling = (med_error_short < -0.04 and err_slope > 0.02)
+    med_error_short = med(r_short) if r_short else 0.0
+    err_slope = linear_slope(r_short) if len(r_short) >= 2 else 0.0
 
-    sustained = (short_n >= 4 and long_n >= 6 and
-                 med_dev_short > t_mild and
-                 med_dev_long > 0.6 * t_mild and
-                 frac_short >= 0.6 and
-                 frac_long >= 0.5)
+    refilling = (nominal_target and active_setpoint < nominal_target - 1e-9 and
+                 med_error_short < -0.02 and err_slope > 0.01)
 
-    persistent = (long_n >= 8 and
-                  med_dev_long > t_mod and
-                  med_dev_short > 0.6 * t_mod and
-                  frac_mid >= 0.6 and
-                  frac_long >= 0.6)
+    if refilling:
+        t_mild *= 1.5
+        t_mod *= 1.5
+        t_sev *= 1.5
 
-    acute = (short_n >= 3 and
+    acute = (short_n >= 4 and
              med_dev_short > 0.8 * t_mod and
-             max_dev_short > t_sev)
+             max_dev_short > t_sev and
+             frac_short >= 0.5)
 
-    sudden = (short_n >= 3 and
-              med_dev_short > t_mod and
-              frac_short >= 0.6)
+    persistent = (long_n >= 12 and
+                  med_dev_long > t_mod and
+                  med_dev_short > 0.5 * t_mod and
+                  frac_long >= 0.7)
 
-    anomaly_flag = bool(sustained or persistent or acute or sudden)
+    sustained = (mid_n >= 8 and
+                 med_dev_mid > t_mild and
+                 med_dev_long > 0.5 * t_mild and
+                 frac_mid >= 0.7)
 
-    # fast clear: a clean recent window overrides the slow long-horizon detectors
-    if short_n >= 3 and med_dev_short < 0.4 * t_mild and frac_short <= 0.2:
+    anomaly_flag = bool(acute or persistent or sustained)
+
+    if short_n >= 3 and med_dev_short < 0.3 * t_mild and frac_short <= 0.2:
         anomaly_flag = False
 
-    # refilling context cancels ordinary evidence but never a saturating fault
-    if refilling and med_dev_short <= 1.0 and max_dev_short <= 1.4:
+    if refilling and med_dev_short < 1.0 and max_dev_short < 1.4:
         anomaly_flag = False
 
     if anomaly_flag:
@@ -151,10 +149,10 @@ def supervise(telemetry_window, active_setpoint, nominal_target):
         if nominal_target and active_setpoint < nominal_target - 1e-9:
             gap = nominal_target - active_setpoint
             step_up = 0.3 * gap
-            if step_up < 0.10:
-                step_up = 0.10
-            if step_up > 0.25:
-                step_up = 0.25
+            if step_up < 0.05:
+                step_up = 0.05
+            if step_up > 0.15:
+                step_up = 0.15
             if step_up > gap:
                 step_up = gap
             adjusted_setpoint = active_setpoint + step_up

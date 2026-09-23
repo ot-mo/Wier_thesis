@@ -186,7 +186,7 @@ def append_context_report(trial_idx, relations):
         f.write(json.dumps({"trial": trial_idx, "relations": relations}) + "\n")
 
 
-def build_prompt(current_code, best_score, traces, failure_catalog, context_relations):
+def build_prompt(current_code, best_score, traces, failure_catalog, context_relations, best_val_score=None):
     scenario_names = ", ".join(s.name for s in SCENARIO_BATTERY)
     return f"""
 You are improving a deterministic supervisory control function for a two-tank
@@ -225,6 +225,7 @@ Current average score across the fixed scenario battery ({scenario_names}): {bes
 (missed_anomaly/false_positive/restore_gap are evaluated PER TANK and summed. restore_gap is |final_setpoint - nominal_target| per tank, counted only when that tank's own fault has fully cleared by episode end.)
 (FP_PENALTY is {NO_FAULT_FALSE_POSITIVE_PENALTY} for a tank in a scenario where THAT TANK never faults at all (e.g. tank2 in tank1_fault_only) - there is zero excuse to ever flag it there - and {FALSE_POSITIVE_PENALTY} otherwise.)
 (IMPORTANT: a candidate is only promoted if it improves the average score AND does not regress any individual scenario beyond tolerance versus the current champion, even if the average improves. Tolerance is asymmetric: for a scenario where NEITHER tank ever faults (baseline_no_fault, noisy_sensor_no_fault), tolerance is ~0 - any regression there is rejected outright. For a scenario with a genuine fault on either tank, up to ~15% (or 100 points, whichever is larger) of regression is allowed, so a trade-off like "fix both_faults at a small cost to tank1_fault_only" is fine as long as it stays within that band.)
+{f'''(GENERALIZATION CHECK: the current champion also scores {best_val_score:.1f} on a separate held-out battery of scenarios you never see (different fault onset times/magnitudes/durations per tank than the ones shown to you, same categories). Its dev score is {best_score:.1f}, so the dev-vs-held-out gap is {best_val_score - best_score:+.1f}. You cannot see or optimize against the held-out battery directly, so a growing gap here is a signal that recent changes are fitting the exact numeric parameters of the visible scenarios rather than the underlying physical pattern - prefer thresholds and logic derived from the plant's known physical relationships (e.g. relative to nominal_target, or from robust statistics of the observed window, or from the tank1-to-tank2 cascade coupling itself) over constants that only happen to work for these specific fault magnitudes.)''' if best_val_score is not None else ''}
 
 Per-scenario results with the current supervisor (failure_point_counts keys are "tank_name:failure_type"):
 {json.dumps(traces, indent=2)}
@@ -470,15 +471,16 @@ def main():
         sys.exit(1)
 
     best_score, best_traces = score_supervisor(current_fn)
+    best_val_score, _ = validate_supervisor(current_fn)
     append_failure_points(best_traces, "trainer_baseline")
-    print(f"[BASELINE] current_supervisor.py avg score: {best_score:.3f}")
+    print(f"[BASELINE] current_supervisor.py avg score: {best_score:.3f} (held-out: {best_val_score:.3f})")
 
     for i in range(num_trials):
         trial_idx = start_trial + i
         print(f"\n=== Trial {i + 1}/{num_trials} (gen_{trial_idx}) ===")
         failure_catalog = load_failure_catalog()
         context_relations = load_context_report()
-        prompt = build_prompt(current_code, best_score, best_traces, failure_catalog, context_relations)
+        prompt = build_prompt(current_code, best_score, best_traces, failure_catalog, context_relations, best_val_score=best_val_score)
         response = call_deepseek(prompt)
 
         if response is None:
@@ -520,9 +522,9 @@ def main():
                 continue
             promote(candidate_code, trial_idx)
             best_score, current_code, best_traces = cand_score, candidate_code, cand_traces
-            val_score, _ = validate_supervisor(candidate_fn)
-            print(f"[VALIDATION] held-out score: {val_score:.3f} (dev score: {cand_score:.3f})")
-            log_trial(trial_idx, "PROMOTED", cand_score, failure_analysis, proposed_change, validation_score=val_score)
+            best_val_score, _ = validate_supervisor(candidate_fn)
+            print(f"[VALIDATION] held-out score: {best_val_score:.3f} (dev score: {cand_score:.3f})")
+            log_trial(trial_idx, "PROMOTED", cand_score, failure_analysis, proposed_change, validation_score=best_val_score)
         else:
             save_candidate_only(candidate_code, trial_idx)
             log_trial(trial_idx, "ROLLBACK", cand_score, failure_analysis, proposed_change)

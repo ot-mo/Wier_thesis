@@ -264,7 +264,7 @@ def call_deepseek(prompt, max_retries=3):
         try:
             time.sleep(0.3)
             response = client.chat.completions.create(
-                model="deepseek-v4-pro",
+                model="deepseek-flash",
                 messages=[
                     {"role": "system", "content": "You are a control-systems engineer. Respond ONLY with valid JSON."},
                     {"role": "user", "content": prompt},

@@ -115,6 +115,22 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
                 cnt += 1
         return cnt / float(m)
 
+    def robust_slope_intercept(xs, ys):
+        m = len(xs)
+        slopes = []
+        for i in range(m):
+            xi = xs[i]
+            yi = ys[i]
+            for j in range(i + 1, m):
+                dx = xs[j] - xi
+                if abs(dx) > 1e-12:
+                    slopes.append((ys[j] - yi) / dx)
+        if not slopes:
+            return 0.0, median(ys)
+        slope = median(slopes)
+        inter = median([y - slope * x for x, y in zip(xs, ys)])
+        return slope, inter
+
     k = min(8, n)
     w = min(10, n)
     wlong = min(16, n)
@@ -153,42 +169,58 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
     sust2 = frac_eff_only(eff2, sustained_thresh2, w) >= 0.6
     raw2 = bool(abs_eff2 or spike2 or dev2_anom or sust2)
 
+    resid_strong = False
+    tail_eff1_w = tail(eff1, wlong)
+    tail_eff2_w = tail(eff2, wlong)
+    if len(tail_eff1_w) >= 3 and len(tail_eff2_w) >= 3:
+        slope, intercept = robust_slope_intercept(eff1[:early_n], eff2[:early_n])
+        resids = [tail_eff2_w[i] - (intercept + slope * tail_eff1_w[i]) for i in range(len(tail_eff1_w))]
+        med_resid = median(resids)
+        resid_strong = med_resid > 0.60
+
     t2_strong = (
         (te2 > 2.80 and ae2 > 0.15) or
         (te2 > 2.40 and ae2 > 0.20) or
         (dev2 > 0.80) or
         (frac_cond(eff2, err2, 2.00, 0.15, wlong) > 0.6) or
-        (frac_eff_only(eff2, 2.10, wlong) > 0.85)
+        (frac_eff_only(eff2, 2.10, wlong) > 0.85) or
+        resid_strong
     )
 
     h = max(3, min(5, k))
     rec1 = (median(tail(eff1, h)) <= ref1 + 0.35) and (mean_abs(tail(err1, h)) <= 0.14)
     rec2 = (median(tail(eff2, h)) <= ref2 + 0.30) and (mean_abs(tail(err2, h)) <= 0.14)
 
-    tank1_anom = bool(raw1 and not rec1)
-
-    upstream1 = bool(raw1 or dev1 > 0.40 or te1 > 2.20)
-    cascade = bool(upstream1 and raw2 and (not t2_strong))
-    tank2_anom = bool(raw2 and not rec2 and not cascade)
-
     LOWER_STEP = 0.3
-    RESTORE_STEP = 0.8
     MAX_DEPRESS = 1.0
+    EPS = 0.12
 
-    if tank1_anom:
+    t1_depressed = t1_sp < nom1 - EPS
+    t1_raw_active = raw1 and not rec1
+    t1_fault_active = t1_raw_active or (t1_depressed and not rec1)
+    tank1_anom = t1_fault_active or t1_depressed
+
+    if t1_fault_active:
         cand1 = max(nom1 - MAX_DEPRESS, t1_sp - LOWER_STEP)
         if cand1 > t1_sp:
             cand1 = t1_sp
         new1 = cand1
         diag1 = 'tank1 anomaly suspected (effort shift above early baseline)'
-    elif (dev1 < 0.30) and (ae1 < 0.14) and (t1_sp < nom1):
-        new1 = min(nom1, t1_sp + RESTORE_STEP)
-        diag1 = 'tank1 stable, restoring toward nominal'
+    elif t1_depressed and rec1:
+        new1 = nom1
+        diag1 = 'tank1 recovered, restoring toward nominal'
     else:
         new1 = t1_sp
         diag1 = 'tank1 nominal'
 
-    if tank2_anom:
+    upstream1 = tank1_anom or raw1 or dev1 > 0.40 or te1 > 2.20
+    t2_depressed = t2_sp < nom2 - EPS
+    cascade = upstream1 and raw2 and not t2_strong and not t2_depressed
+    t2_raw_active = raw2 and not rec2
+    t2_fault_active = (not cascade) and (t2_raw_active or (t2_depressed and not rec2))
+    tank2_anom = t2_fault_active or t2_depressed
+
+    if t2_fault_active:
         cand2 = max(nom2 - MAX_DEPRESS, t2_sp - LOWER_STEP)
         if cand2 > t2_sp:
             cand2 = t2_sp
@@ -197,9 +229,9 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
     elif cascade:
         new2 = t2_sp
         diag2 = 'tank2 perturbation attributed to upstream tank1 fault (cascade, not flagged)'
-    elif (dev2 < 0.30) and (ae2 < 0.14) and (t2_sp < nom2):
-        new2 = min(nom2, t2_sp + RESTORE_STEP)
-        diag2 = 'tank2 stable, restoring toward nominal'
+    elif t2_depressed and rec2:
+        new2 = nom2
+        diag2 = 'tank2 recovered, restoring toward nominal'
     else:
         new2 = t2_sp
         diag2 = 'tank2 nominal'

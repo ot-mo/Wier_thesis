@@ -11,10 +11,13 @@ underlying reward-shaping lessons (cheap false-positive penalty causes
 cry-wolf; no restore-gap term means no pressure to restore) apply here too.
 """
 
+import csv
+import hashlib
 import json
 import os
 import sys
 import time
+from datetime import datetime, timezone
 
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -36,6 +39,8 @@ FAILURE_POINTS_PATH = os.path.join(RESULTS_DIR, "failure_points_two_tank.jsonl")
 TRIALS_PATH = os.path.join(RESULTS_DIR, "supervisor_training_trials_two_tank.jsonl")
 CONTEXT_REPORT_PATH = os.path.join(RESULTS_DIR, "context_report_two_tank.jsonl")
 MAX_CONTEXT_RELATIONS = 25  # bounds prompt growth over a long run
+SUMMARY_CSV_PATH = os.path.join(RESULTS_DIR, "summary_two_tank.csv")
+FINAL_REPORT_PATH = os.path.join(RESULTS_DIR, "final_report_two_tank.md")
 
 VIOLATION_PENALTY = 500
 MISSED_ANOMALY_PENALTY = 300
@@ -72,12 +77,32 @@ SCENARIO_BATTERY = [
                            sensor_noise_std=0.1, seed=42),
 ]
 
+# Held-out validation battery: same categories as SCENARIO_BATTERY but with
+# different fault parameters, never used to decide promotion. Its only
+# purpose is to catch overfitting to the exact dev-battery fault parameters.
+VALIDATION_SCENARIO_BATTERY = [
+    TwoTankScenarioConfig(name="val_baseline_no_fault"),
+    TwoTankScenarioConfig(name="val_tank1_fault_only", leak1_onset_s=7.0, leak1_magnitude=2.4, leak1_offset_s=19.0),
+    TwoTankScenarioConfig(name="val_tank2_fault_only", leak2_onset_s=7.0, leak2_magnitude=2.4, leak2_offset_s=19.0),
+    TwoTankScenarioConfig(name="val_both_faults", leak1_onset_s=4.0, leak1_magnitude=1.6, leak1_offset_s=20.0,
+                           leak2_onset_s=10.0, leak2_magnitude=1.8, leak2_offset_s=22.0),
+    TwoTankScenarioConfig(name="val_tank1_severe_persistent", leak1_onset_s=15.0, leak1_magnitude=4.6, leak1_offset_s=None),
+    TwoTankScenarioConfig(name="val_tank2_severe_persistent", leak2_onset_s=15.0, leak2_magnitude=4.6, leak2_offset_s=None),
+    TwoTankScenarioConfig(name="val_noisy_sensor_no_fault", sensor_noise_std=0.15, seed=7),
+    TwoTankScenarioConfig(name="val_noisy_sensor_tank1_fault", leak1_onset_s=6.0, leak1_magnitude=2.6, leak1_offset_s=18.0,
+                           sensor_noise_std=0.15, seed=7),
+]
 
-def score_supervisor(supervisor_fn):
-    """Returns (avg_score, per_scenario_traces)."""
+
+def score_supervisor(supervisor_fn, battery=None):
+    """Returns (avg_score, per_scenario_traces) for the given battery (default:
+    the dev/promotion SCENARIO_BATTERY). Pass VALIDATION_SCENARIO_BATTERY to
+    evaluate on the held-out set instead - same scoring formula either way.
+    """
+    battery = SCENARIO_BATTERY if battery is None else battery
     traces = []
     total = 0.0
-    for scenario in SCENARIO_BATTERY:
+    for scenario in battery:
         result = run_episode(supervisor_fn, scenario)
         m = result["metrics"]
         tank1_never_faults = scenario.leak1_onset_s is None
@@ -98,7 +123,14 @@ def score_supervisor(supervisor_fn):
         )
         total += scenario_score
         traces.append({"scenario": scenario.name, "score": round(scenario_score, 3), "log_report": build_log_report(result)})
-    return total / len(SCENARIO_BATTERY), traces
+    return total / len(battery), traces
+
+
+def validate_supervisor(supervisor_fn):
+    """Evaluates on the held-out validation battery. Never used to decide
+    promotion - purely for reporting genuine generalization performance.
+    """
+    return score_supervisor(supervisor_fn, battery=VALIDATION_SCENARIO_BATTERY)
 
 
 def load_failure_catalog(max_examples_per_category=3):
@@ -265,13 +297,14 @@ def save_candidate_only(candidate_code, trial_idx):
         f.write(candidate_code)
 
 
-def log_trial(trial_idx, decision, score, failure_analysis, proposed_change, reason=None):
+def log_trial(trial_idx, decision, score, failure_analysis, proposed_change, reason=None, validation_score=None):
     os.makedirs(RESULTS_DIR, exist_ok=True)
     with open(TRIALS_PATH, "a", encoding="utf-8") as f:
         f.write(json.dumps({
             "trial": trial_idx,
             "decision": decision,
             "score": score,
+            "validation_score": validation_score,
             "failure_analysis": failure_analysis,
             "proposed_change": proposed_change,
             "reason": reason,
@@ -329,7 +362,98 @@ def _next_trial_start():
     return max_n + 1
 
 
+def _read_trials():
+    if not os.path.exists(TRIALS_PATH):
+        return []
+    with open(TRIALS_PATH, "r", encoding="utf-8") as f:
+        return [json.loads(line) for line in f if line.strip()]
+
+
+def generate_report():
+    """Regenerates summary_two_tank.csv and final_report_two_tank.md from the
+    accumulated trial log, context report, and current champion. Safe to call
+    standalone (`python train_supervisor_two_tank.py --report`) without
+    running any new trials.
+    """
+    os.makedirs(RESULTS_DIR, exist_ok=True)
+    trials = _read_trials()
+
+    with open(SUMMARY_CSV_PATH, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["trial", "decision", "score", "validation_score", "reason"])
+        for t in trials:
+            writer.writerow([t.get("trial"), t.get("decision"), t.get("score"), t.get("validation_score"), t.get("reason")])
+
+    decision_counts = {}
+    for t in trials:
+        decision_counts[t["decision"]] = decision_counts.get(t["decision"], 0) + 1
+    promoted = [t for t in trials if t["decision"] == "PROMOTED"]
+
+    champion_hash = None
+    champion_score = None
+    champion_val_score = None
+    if os.path.exists(CURRENT_SUPERVISOR_PATH):
+        with open(CURRENT_SUPERVISOR_PATH, "r", encoding="utf-8") as f:
+            champion_code = f.read()
+        champion_hash = hashlib.sha256(champion_code.encode("utf-8")).hexdigest()[:12]
+        ok, _ = check_source(champion_code, required_args=MIMO_REQUIRED_ARGS)
+        if ok:
+            fn, err = safe_exec_supervisor(champion_code)
+            if not err:
+                champion_score, _ = score_supervisor(fn)
+                champion_val_score, _ = validate_supervisor(fn)
+
+    relations = load_context_report(max_relations=MAX_CONTEXT_RELATIONS)
+
+    lines = [
+        "# Two-Tank MIMO Supervisor Training Report",
+        "",
+        f"Generated: {datetime.now(timezone.utc).isoformat(timespec='seconds')}",
+        "",
+        "## Current champion",
+        "",
+        f"- Source hash: `{champion_hash}`" if champion_hash else "- No current_supervisor.py found",
+    ]
+    if champion_score is not None:
+        gap = champion_val_score - champion_score
+        lines += [
+            f"- Dev battery score: {champion_score:.2f}",
+            f"- Held-out validation battery score: {champion_val_score:.2f}",
+            f"- Dev/validation gap: {gap:+.2f} ({'worse on held-out - possible overfitting' if gap > 0.15 * abs(champion_score) + 5 else 'consistent with dev performance'})",
+        ]
+
+    lines += [
+        "",
+        "## Trial history",
+        "",
+        f"- Total trials logged: {len(trials)}",
+    ]
+    for decision, count in sorted(decision_counts.items(), key=lambda kv: -kv[1]):
+        lines.append(f"  - {decision}: {count}")
+
+    lines += ["", "## Score trajectory (promoted trials only)", "", "| Trial | Dev score | Validation score |", "|---|---|---|"]
+    for t in promoted:
+        val = t.get("validation_score")
+        lines.append(f"| gen_{t['trial']} | {t['score']:.2f} | {val:.2f} |" if val is not None else f"| gen_{t['trial']} | {t['score']:.2f} | - |")
+
+    lines += ["", "## Known open issues / lessons learned so far", ""]
+    if relations:
+        for r in relations:
+            lines.append(f"- {r}")
+    else:
+        lines.append("(none recorded yet)")
+
+    with open(FINAL_REPORT_PATH, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+    print(f"[SUCCESS] Report written to {FINAL_REPORT_PATH} and {SUMMARY_CSV_PATH}")
+
+
 def main():
+    if "--report" in sys.argv:
+        generate_report()
+        return
+
     num_trials = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     start_trial = _next_trial_start()
 
@@ -396,12 +520,15 @@ def main():
                 continue
             promote(candidate_code, trial_idx)
             best_score, current_code, best_traces = cand_score, candidate_code, cand_traces
-            log_trial(trial_idx, "PROMOTED", cand_score, failure_analysis, proposed_change)
+            val_score, _ = validate_supervisor(candidate_fn)
+            print(f"[VALIDATION] held-out score: {val_score:.3f} (dev score: {cand_score:.3f})")
+            log_trial(trial_idx, "PROMOTED", cand_score, failure_analysis, proposed_change, validation_score=val_score)
         else:
             save_candidate_only(candidate_code, trial_idx)
             log_trial(trial_idx, "ROLLBACK", cand_score, failure_analysis, proposed_change)
 
     print(f"\n[DONE] Final best score: {best_score:.3f}. current_supervisor.py reflects the best candidate found.")
+    generate_report()
 
 
 if __name__ == "__main__":

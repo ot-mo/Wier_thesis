@@ -44,28 +44,6 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
     err1 = series('tank1', 'error')
     err2 = series('tank2', 'error')
 
-    def mean(xs):
-        if not xs:
-            return 0.0
-        return sum(xs) / float(len(xs))
-
-    def median(xs):
-        if not xs:
-            return 0.0
-        s = sorted(xs)
-        m = len(s)
-        if m % 2 == 1:
-            return s[m // 2]
-        return (s[m // 2 - 1] + s[m // 2]) / 2.0
-
-    def mean_abs(xs):
-        if not xs:
-            return 0.0
-        total = 0.0
-        for x in xs:
-            total += abs(x)
-        return total / float(len(xs))
-
     def quantile(xs, q):
         if not xs:
             return 0.0
@@ -85,6 +63,21 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
         frac = pos - lo
         return s[lo] * (1.0 - frac) + s[hi] * frac
 
+    def median(xs):
+        if not xs:
+            return 0.0
+        s = sorted(xs)
+        m = len(s)
+        mid = m // 2
+        if m % 2:
+            return s[mid]
+        return (s[mid - 1] + s[mid]) / 2.0
+
+    def median_abs(xs):
+        if not xs:
+            return 0.0
+        return median([abs(x) for x in xs])
+
     def tail(xs, kk):
         if kk <= 0:
             return []
@@ -92,83 +85,85 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
             return xs
         return xs[len(xs) - kk:]
 
-    def frac_cond(effs, errs, cond_eff, cond_err, win):
-        seg_e = tail(effs, win)
-        seg_r = tail(errs, win)
-        m = len(seg_e)
-        if m <= 0:
-            return 0.0
-        cnt = 0
-        for i in range(m):
-            if seg_e[i] > cond_eff and abs(seg_r[i]) > cond_err:
-                cnt += 1
-        return cnt / float(m)
-
-    def frac_eff_only(effs, threshold, win):
+    def frac_above(effs, ref, margin, win):
         seg = tail(effs, win)
-        m = len(seg)
-        if m <= 0:
+        if not seg:
             return 0.0
         cnt = 0
         for e in seg:
-            if e > threshold:
+            if e > ref + margin:
                 cnt += 1
-        return cnt / float(m)
+        return cnt / float(len(seg))
+
+    def frac_above_abs(effs, bar, win):
+        seg = tail(effs, win)
+        if not seg:
+            return 0.0
+        cnt = 0
+        for e in seg:
+            if e > bar:
+                cnt += 1
+        return cnt / float(len(seg))
+
+    def frac_healthy(effs, ref, margin, win):
+        seg = tail(effs, win)
+        if not seg:
+            return 0.0
+        cnt = 0
+        for e in seg:
+            if e <= ref + margin:
+                cnt += 1
+        return cnt / float(len(seg))
 
     k = min(8, n)
-    w = min(10, n)
-    wlong = min(16, n)
+    w = min(12, n)
+    wlong = min(18, n)
+    h = max(3, min(4, k))
 
-    early_n = max(3, min(8, n // 3))
-    if early_n > n:
-        early_n = n
-    early_eff1 = eff1[:early_n]
-    early_eff2 = eff2[:early_n]
-    q_early1 = quantile(early_eff1, 0.20)
-    q_early2 = quantile(early_eff2, 0.20)
-    q_full1 = quantile(eff1, 0.20)
-    q_full2 = quantile(eff2, 0.20)
-    ref1 = min(q_early1, q_full1)
-    ref2 = min(q_early2, q_full2)
+    early_n = min(8, n)
+    ref1 = min(quantile(eff1, 0.20), quantile(eff1[:early_n], 0.35))
+    ref2 = min(quantile(eff2, 0.20), quantile(eff2[:early_n], 0.35))
 
-    te1 = median(tail(eff1, k))
-    te2 = median(tail(eff2, k))
-    ae1 = mean_abs(tail(err1, k))
-    ae2 = mean_abs(tail(err2, k))
+    med1 = median(tail(eff1, k))
+    med2 = median(tail(eff2, k))
+    mae1 = median_abs(tail(err1, k))
+    mae2 = median_abs(tail(err2, k))
+    dev1 = med1 - ref1
+    dev2 = med2 - ref2
 
-    dev1 = te1 - ref1
-    dev2 = te2 - ref2
+    # Sustained, error-free effort-shift fractions (lessons learned: median/recent fraction detects compensated leaks)
+    fs1 = frac_above(eff1, ref1, 0.25, w)
+    fs2 = frac_above(eff2, ref2, 0.25, w)
 
-    abs_eff1 = te1 > 2.50
-    spike1 = te1 > 3.10
-    dev1_anom = (dev1 > 0.50 and ae1 > 0.08) or (dev1 > 0.85)
-    sustained_thresh1 = max(ref1 + 0.45, 2.05)
-    sust1 = frac_eff_only(eff1, sustained_thresh1, w) >= 0.6
-    raw1 = bool(abs_eff1 or spike1 or dev1_anom or sust1)
+    tank1_sust = (fs1 >= 0.55) and (med1 > ref1 + 0.15)
+    tank2_sust = (fs2 >= 0.55) and (med2 > ref2 + 0.15)
 
-    abs_eff2 = te2 > 2.00
-    spike2 = te2 > 2.70
-    dev2_anom = (dev2 > 0.40 and ae2 > 0.08) or (dev2 > 0.75)
-    sustained_thresh2 = max(ref2 + 0.35, 1.80)
-    sust2 = frac_eff_only(eff2, sustained_thresh2, w) >= 0.6
-    raw2 = bool(abs_eff2 or spike2 or dev2_anom or sust2)
+    tank1_dev = (dev1 > 0.28) and (mae1 > 0.08)
+    tank2_dev = (dev2 > 0.25) and (mae2 > 0.10)
 
-    t2_strong = (
-        (te2 > 2.80 and ae2 > 0.15) or
-        (te2 > 2.40 and ae2 > 0.20) or
-        (dev2 > 0.80) or
-        (frac_cond(eff2, err2, 2.00, 0.15, wlong) > 0.6) or
-        (frac_eff_only(eff2, 2.10, wlong) > 0.85)
-    )
+    tank1_spike = (med1 > 1.8) and (mae1 > 0.16)
+    tank2_spike = (med2 > 1.6) and (mae2 > 0.22)
 
-    h = max(3, min(5, k))
-    rec1 = (median(tail(eff1, h)) <= ref1 + 0.35) and (mean_abs(tail(err1, h)) <= 0.14)
-    rec2 = (median(tail(eff2, h)) <= ref2 + 0.30) and (mean_abs(tail(err2, h)) <= 0.14)
+    tank1_rel = (dev1 > 0.55) and (mae1 > 0.08)
+    tank2_rel = (dev2 > 0.50) and (mae2 > 0.10)
+
+    raw1 = tank1_sust or tank1_dev or tank1_spike or tank1_rel
+    raw2 = tank2_sust or tank2_dev or tank2_spike or tank2_rel
+
+    # Independent tank2 evidence, above the coupling expected from tank1.
+    t2_long_abs = frac_above_abs(eff2, 2.0, wlong) > 0.65
+    t2_spike_indep = (med2 > 2.0) and (mae2 > 0.16)
+    t2_rel_indep = (frac_above(eff2, ref2, 0.55, wlong) > 0.70) and (med2 > ref2 + 0.55) and (med2 > 1.7)
+    t2_indep = t2_long_abs or t2_spike_indep or t2_rel_indep
+
+    # Recovery uses early-window-anchored reference and requires sustained healthy effort.
+    rec1 = (k >= 4) and (median(tail(eff1, h)) <= ref1 + 0.20) and (median_abs(tail(err1, h)) <= 0.10) and (frac_healthy(eff1, ref1, 0.20, w) >= 0.60)
+    rec2 = (k >= 4) and (median(tail(eff2, h)) <= ref2 + 0.20) and (median_abs(tail(err2, h)) <= 0.12) and (frac_healthy(eff2, ref2, 0.20, w) >= 0.60)
+
+    upstream1 = raw1 or (med1 > ref1 + 0.35) or (med1 > 1.7)
+    cascade = upstream1 and raw2 and (not t2_indep)
 
     tank1_anom = bool(raw1 and not rec1)
-
-    upstream1 = bool(raw1 or dev1 > 0.40 or te1 > 2.20)
-    cascade = bool(upstream1 and raw2 and (not t2_strong))
     tank2_anom = bool(raw2 and not rec2 and not cascade)
 
     LOWER_STEP = 0.3
@@ -180,8 +175,8 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
         if cand1 > t1_sp:
             cand1 = t1_sp
         new1 = cand1
-        diag1 = 'tank1 anomaly suspected (effort shift above early baseline)'
-    elif (dev1 < 0.30) and (ae1 < 0.14) and (t1_sp < nom1):
+        diag1 = 'tank1 anomaly suspected (sustained effort/error above healthy reference)'
+    elif (dev1 < 0.30) and (mae1 < 0.10) and (t1_sp < nom1):
         new1 = min(nom1, t1_sp + RESTORE_STEP)
         diag1 = 'tank1 stable, restoring toward nominal'
     else:
@@ -193,11 +188,11 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
         if cand2 > t2_sp:
             cand2 = t2_sp
         new2 = cand2
-        diag2 = 'tank2 anomaly suspected (independent, above epidemic coupling)'
+        diag2 = 'tank2 anomaly suspected (independent, sustained evidence)'
     elif cascade:
         new2 = t2_sp
         diag2 = 'tank2 perturbation attributed to upstream tank1 fault (cascade, not flagged)'
-    elif (dev2 < 0.30) and (ae2 < 0.14) and (t2_sp < nom2):
+    elif (dev2 < 0.30) and (mae2 < 0.12) and (t2_sp < nom2):
         new2 = min(nom2, t2_sp + RESTORE_STEP)
         diag2 = 'tank2 stable, restoring toward nominal'
     else:

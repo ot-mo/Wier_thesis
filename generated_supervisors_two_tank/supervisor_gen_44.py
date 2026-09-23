@@ -115,64 +115,110 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
                 cnt += 1
         return cnt / float(m)
 
-    k = min(8, n)
-    w = min(10, n)
-    wlong = min(16, n)
+    def stdev(xs):
+        m = len(xs)
+        if m < 2:
+            return 0.0
+        avg = sum(xs) / float(m)
+        var = sum((x - avg) ** 2 for x in xs) / float(m - 1)
+        return var ** 0.5
 
-    early_n = max(3, min(8, n // 3))
+    k = min(6, n)
+    w = min(12, n)
+    wlong = min(16, n)
+    h = max(3, min(4, k))
+
+    early_n = max(5, min(12, n // 2))
     if early_n > n:
         early_n = n
-    early_eff1 = eff1[:early_n]
-    early_eff2 = eff2[:early_n]
-    q_early1 = quantile(early_eff1, 0.20)
-    q_early2 = quantile(early_eff2, 0.20)
-    q_full1 = quantile(eff1, 0.20)
-    q_full2 = quantile(eff2, 0.20)
+
+    early1 = eff1[:early_n]
+    early2 = eff2[:early_n]
+    q_early1 = quantile(early1, 0.10)
+    q_early2 = quantile(early2, 0.10)
+    q_full1 = quantile(eff1, 0.10)
+    q_full2 = quantile(eff2, 0.10)
     ref1 = min(q_early1, q_full1)
     ref2 = min(q_early2, q_full2)
+
+    # Regression of tank2 effort on tank1 effort over early (pre-fault) window
+    if n >= 4 and len(early1) >= 3:
+        m1 = mean(early1)
+        m2 = mean(early2)
+        var1 = sum((x - m1) ** 2 for x in early1)
+        if var1 > 1e-9:
+            cov = sum((early1[i] - m1) * (early2[i] - m2) for i in range(len(early1)))
+            slope = cov / var1
+            intercept = m2 - slope * m1
+            resid2 = [eff2[i] - (slope * eff1[i] + intercept) for i in range(n)]
+            base_res2 = median(resid2[:early_n])
+            std_res2 = stdev(resid2[:early_n])
+        else:
+            resid2 = [eff2[i] - ref2 for i in range(n)]
+            base_res2 = median(resid2[:early_n])
+            std_res2 = stdev(resid2[:early_n])
+    else:
+        resid2 = [eff2[i] - ref2 for i in range(n)]
+        base_res2 = median(resid2[:early_n])
+        std_res2 = stdev(resid2[:early_n])
 
     te1 = median(tail(eff1, k))
     te2 = median(tail(eff2, k))
     ae1 = mean_abs(tail(err1, k))
     ae2 = mean_abs(tail(err2, k))
-
     dev1 = te1 - ref1
     dev2 = te2 - ref2
 
-    abs_eff1 = te1 > 2.50
-    spike1 = te1 > 3.10
-    dev1_anom = (dev1 > 0.50 and ae1 > 0.08) or (dev1 > 0.85)
-    sustained_thresh1 = max(ref1 + 0.45, 2.05)
-    sust1 = frac_eff_only(eff1, sustained_thresh1, w) >= 0.6
-    raw1 = bool(abs_eff1 or spike1 or dev1_anom or sust1)
+    rmed2 = median(tail(resid2, k))
+    rdev2 = rmed2 - base_res2
 
-    abs_eff2 = te2 > 2.00
-    spike2 = te2 > 2.70
-    dev2_anom = (dev2 > 0.40 and ae2 > 0.08) or (dev2 > 0.75)
-    sustained_thresh2 = max(ref2 + 0.35, 1.80)
-    sust2 = frac_eff_only(eff2, sustained_thresh2, w) >= 0.6
-    raw2 = bool(abs_eff2 or spike2 or dev2_anom or sust2)
+    # Tank 1 raw detection
+    abs_eff1 = te1 > 2.20
+    spike1 = te1 > 2.80
+    dev1_anom = (dev1 > 0.35 and ae1 > 0.05) or (dev1 > 0.55)
+    sustained1 = frac_eff_only(eff1, max(ref1 + 0.25, 1.90), wlong) >= 0.55
+    raw1 = bool(abs_eff1 or spike1 or dev1_anom or sustained1)
 
-    t2_strong = (
-        (te2 > 2.80 and ae2 > 0.15) or
-        (te2 > 2.40 and ae2 > 0.20) or
-        (dev2 > 0.80) or
-        (frac_cond(eff2, err2, 2.00, 0.15, wlong) > 0.6) or
-        (frac_eff_only(eff2, 2.10, wlong) > 0.85)
+    # Tank 2 raw detection
+    abs_eff2 = te2 > 1.75
+    spike2 = te2 > 2.30
+    dev2_anom = (dev2 > 0.30 and ae2 > 0.05) or (dev2 > 0.50)
+    sustained2 = frac_eff_only(eff2, max(ref2 + 0.20, 1.55), wlong) >= 0.55
+    raw2 = bool(abs_eff2 or spike2 or dev2_anom or sustained2)
+
+    # Independent tank2 residual signature
+    indep2 = bool(
+        (rdev2 > 0.35 and ae2 > 0.05) or
+        (std_res2 > 0.1 and rdev2 > 3.0 * std_res2) or
+        (frac_eff_only(resid2, base_res2 + 0.20, wlong) >= 0.6)
     )
 
-    h = max(3, min(5, k))
-    rec1 = (median(tail(eff1, h)) <= ref1 + 0.35) and (mean_abs(tail(err1, h)) <= 0.14)
-    rec2 = (median(tail(eff2, h)) <= ref2 + 0.30) and (mean_abs(tail(err2, h)) <= 0.14)
+    # Strong tank2 override: independent signature or large raw shift
+    t2_strong = bool(
+        indep2 or
+        (te2 > 2.30 and ae2 > 0.10) or
+        (dev2 > 0.55) or
+        (frac_cond(eff2, err2, 1.70, 0.12, wlong) > 0.55) or
+        (frac_eff_only(eff2, 1.80, wlong) > 0.80)
+    )
+
+    # Recovery checks
+    rec1 = (median(tail(eff1, h)) <= ref1 + 0.20) and (mean_abs(tail(err1, h)) <= 0.10)
+    rmed_rec2 = median(tail(resid2, h))
+    rec2 = (
+        (median(tail(eff2, h)) <= ref2 + 0.20) and
+        (mean_abs(tail(err2, h)) <= 0.10) and
+        (rmed_rec2 <= base_res2 + 0.15)
+    )
 
     tank1_anom = bool(raw1 and not rec1)
 
-    upstream1 = bool(raw1 or dev1 > 0.40 or te1 > 2.20)
+    upstream1 = bool(raw1 or dev1 > 0.30 or te1 > 2.00)
     cascade = bool(upstream1 and raw2 and (not t2_strong))
     tank2_anom = bool(raw2 and not rec2 and not cascade)
 
-    LOWER_STEP = 0.3
-    RESTORE_STEP = 0.8
+    LOWER_STEP = 0.4
+    RESTORE_STEP = 1.0
     MAX_DEPRESS = 1.0
 
     if tank1_anom:
@@ -180,8 +226,8 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
         if cand1 > t1_sp:
             cand1 = t1_sp
         new1 = cand1
-        diag1 = 'tank1 anomaly suspected (effort shift above early baseline)'
-    elif (dev1 < 0.30) and (ae1 < 0.14) and (t1_sp < nom1):
+        diag1 = 'tank1 anomaly suspected'
+    elif (dev1 < 0.20) and (ae1 < 0.10) and (t1_sp < nom1):
         new1 = min(nom1, t1_sp + RESTORE_STEP)
         diag1 = 'tank1 stable, restoring toward nominal'
     else:
@@ -193,13 +239,17 @@ def supervise(telemetry_window, active_setpoints, nominal_targets):
         if cand2 > t2_sp:
             cand2 = t2_sp
         new2 = cand2
-        diag2 = 'tank2 anomaly suspected (independent, above epidemic coupling)'
+        diag2 = 'tank2 anomaly suspected'
     elif cascade:
         new2 = t2_sp
-        diag2 = 'tank2 perturbation attributed to upstream tank1 fault (cascade, not flagged)'
-    elif (dev2 < 0.30) and (ae2 < 0.14) and (t2_sp < nom2):
-        new2 = min(nom2, t2_sp + RESTORE_STEP)
-        diag2 = 'tank2 stable, restoring toward nominal'
+        diag2 = 'tank2 perturbation attributed to upstream tank1 fault'
+    elif (dev2 < 0.20) and (ae2 < 0.10) and (t2_sp < nom2):
+        if rmed_rec2 <= base_res2 + 0.15:
+            new2 = min(nom2, t2_sp + RESTORE_STEP)
+            diag2 = 'tank2 stable, restoring toward nominal'
+        else:
+            new2 = t2_sp
+            diag2 = 'tank2 nominal'
     else:
         new2 = t2_sp
         diag2 = 'tank2 nominal'

@@ -34,6 +34,8 @@ CURRENT_SUPERVISOR_PATH = os.path.join(SUPERVISORS_DIR, "current_supervisor.py")
 RESULTS_DIR = "results"
 FAILURE_POINTS_PATH = os.path.join(RESULTS_DIR, "failure_points_two_tank.jsonl")
 TRIALS_PATH = os.path.join(RESULTS_DIR, "supervisor_training_trials_two_tank.jsonl")
+CONTEXT_REPORT_PATH = os.path.join(RESULTS_DIR, "context_report_two_tank.jsonl")
+MAX_CONTEXT_RELATIONS = 25  # bounds prompt growth over a long run
 
 VIOLATION_PENALTY = 500
 MISSED_ANOMALY_PENALTY = 300
@@ -44,10 +46,18 @@ RESTORE_GAP_PENALTY = 200
 
 # Guards against a candidate "winning" the averaged score by regressing badly on
 # one scenario while gaining on others (composite-score gaming) - a promotion
-# is rejected if any individual scenario got worse than this tolerance versus
-# the current champion's own score on that scenario, even if the total improved.
-REGRESSION_ABS_TOLERANCE = 50.0
-REGRESSION_REL_TOLERANCE = 0.05
+# is rejected if any individual scenario got worse than tolerance versus the
+# current champion's own score on that scenario, even if the total improved.
+# Tolerance is asymmetric: a scenario where NEITHER tank ever faults gets
+# near-zero tolerance (any regression there is inexcusable - that's the exact
+# exploit this guard exists for), while a scenario with a genuine fault on
+# either tank gets a looser tolerance, since trading a little performance on
+# one real fault scenario for a much bigger win on another (e.g. fixing
+# both_faults at a small cost to tank1_fault_only) is a normal, legitimate
+# control-engineering trade-off, not gaming.
+NO_FAULT_REGRESSION_ABS_TOLERANCE = 5.0
+FAULT_REGRESSION_ABS_TOLERANCE = 100.0
+FAULT_REGRESSION_REL_TOLERANCE = 0.15
 
 SCENARIO_BATTERY = [
     TwoTankScenarioConfig(name="baseline_no_fault"),
@@ -111,7 +121,40 @@ def load_failure_catalog(max_examples_per_category=3):
     return {"counts": counts, "examples": examples}
 
 
-def build_prompt(current_code, best_score, traces, failure_catalog):
+def load_context_report(max_relations=MAX_CONTEXT_RELATIONS):
+    """Reads accumulated cause-effect relations discovered across past trials.
+
+    Distinct from failure_catalog (raw counts) and per-trial failure_analysis
+    (about one specific candidate): this is durable, reusable knowledge - e.g.
+    "raising cross-tank sensitivity to catch simultaneous faults tends to
+    increase false triggers under sensor noise" - that should inform every
+    future trial, not just the one that discovered it. Without this, each
+    trial reasons from scratch and can re-derive (or get stuck repeating) the
+    same failed trade-off with no memory of having tried it before.
+    """
+    if not os.path.exists(CONTEXT_REPORT_PATH):
+        return []
+    relations = []
+    with open(CONTEXT_REPORT_PATH, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            entry = json.loads(line)
+            for relation in entry.get("relations", []):
+                relations.append(relation)
+    return relations[-max_relations:]
+
+
+def append_context_report(trial_idx, relations):
+    if not relations:
+        return
+    os.makedirs(RESULTS_DIR, exist_ok=True)
+    with open(CONTEXT_REPORT_PATH, "a", encoding="utf-8") as f:
+        f.write(json.dumps({"trial": trial_idx, "relations": relations}) + "\n")
+
+
+def build_prompt(current_code, best_score, traces, failure_catalog, context_relations):
     scenario_names = ", ".join(s.name for s in SCENARIO_BATTERY)
     return f"""
 You are improving a deterministic supervisory control function for a two-tank
@@ -149,7 +192,7 @@ Current average score across the fixed scenario battery ({scenario_names}): {bes
 (Lower score is better. Score = IAE(both tanks combined) + violation_count*{VIOLATION_PENALTY} + missed_anomaly_count*{MISSED_ANOMALY_PENALTY} + false_positive_count*FP_PENALTY + exception_count*{EXCEPTION_PENALTY} + restore_gap*{RESTORE_GAP_PENALTY})
 (missed_anomaly/false_positive/restore_gap are evaluated PER TANK and summed. restore_gap is |final_setpoint - nominal_target| per tank, counted only when that tank's own fault has fully cleared by episode end.)
 (FP_PENALTY is {NO_FAULT_FALSE_POSITIVE_PENALTY} for a tank in a scenario where THAT TANK never faults at all (e.g. tank2 in tank1_fault_only) - there is zero excuse to ever flag it there - and {FALSE_POSITIVE_PENALTY} otherwise.)
-(IMPORTANT: a candidate is only promoted if it improves the average score AND does not regress any individual scenario's own score by more than ~5% (or 50 points, whichever is larger) versus the current champion. Do not trade a regression on one scenario - especially a no-fault scenario - for gains on another; such a candidate will be rejected even if the average improves.)
+(IMPORTANT: a candidate is only promoted if it improves the average score AND does not regress any individual scenario beyond tolerance versus the current champion, even if the average improves. Tolerance is asymmetric: for a scenario where NEITHER tank ever faults (baseline_no_fault, noisy_sensor_no_fault), tolerance is ~0 - any regression there is rejected outright. For a scenario with a genuine fault on either tank, up to ~15% (or 100 points, whichever is larger) of regression is allowed, so a trade-off like "fix both_faults at a small cost to tank1_fault_only" is fine as long as it stays within that band.)
 
 Per-scenario results with the current supervisor (failure_point_counts keys are "tank_name:failure_type"):
 {json.dumps(traces, indent=2)}
@@ -157,9 +200,16 @@ Per-scenario results with the current supervisor (failure_point_counts keys are 
 Aggregate failure-point catalog from past runs (counts and worst examples, keyed "tank_name:failure_type"):
 {json.dumps(failure_catalog, indent=2)}
 
+Lessons learned from previous trials - cause-effect relationships already discovered
+by earlier attempts (these are durable observations, not tied to any one candidate's
+code; do not repeat a change that a relation below says already failed for a known
+reason - build on this instead of re-deriving it from scratch):
+{json.dumps(context_relations, indent=2) if context_relations else "(none recorded yet - this is an early trial)"}
+
 Task:
 1. Diagnose what is causing the worst-scoring scenarios and/or the most common failure-point categories, paying attention to whether tank1 and tank2 need different thresholds (they have different physical parameters) and whether a tank1 fault should influence tank2's decision (cascade coupling).
-2. Propose an improved `supervise` function that reduces missed anomalies and false positives on both tanks without introducing new safety violations, and that restores both setpoints back toward nominal once their respective faults have genuinely cleared.
+2. Propose an improved `supervise` function that reduces missed anomalies and false positives on both tanks without introducing new safety violations, and that restores both setpoints back toward nominal once their respective faults have genuinely cleared. Take the lessons-learned list into account - if it shows a class of fix has already failed for a specific reason, try a genuinely different approach instead of a small variation on it.
+3. Separately from the code change itself, identify any NEW generalizable cause-effect relationship this trial's result reveals (e.g. "X tends to cause Y because Z") that would be useful for future trials to know, whether or not this candidate gets promoted. Only include a relation if it is a genuinely new, durable insight - do not repeat one already listed above.
 
 You must output strictly JSON matching this structure:
 {{
@@ -170,7 +220,8 @@ You must output strictly JSON matching this structure:
     "next_recommendation": "string"
   }},
   "proposed_change": "string",
-  "code": "full source of the new supervise function as a string"
+  "code": "full source of the new supervise function as a string",
+  "relations_learned": ["short generalizable cause-effect statement", ...]
 }}
 """
 
@@ -180,7 +231,7 @@ def call_deepseek(prompt, max_retries=3):
         try:
             time.sleep(0.3)
             response = client.chat.completions.create(
-                model="deepseek-flash",
+                model="deepseek-v4-pro",
                 messages=[
                     {"role": "system", "content": "You are a control-systems engineer. Respond ONLY with valid JSON."},
                     {"role": "user", "content": prompt},
@@ -242,6 +293,9 @@ def append_failure_points(traces, run_label):
                 }) + "\n")
 
 
+_SCENARIO_BY_NAME = {s.name: s for s in SCENARIO_BATTERY}
+
+
 def find_scenario_regression(best_traces, cand_traces):
     """Returns (scenario_name, old_score, new_score) for the first scenario where
     the candidate is worse than the champion beyond tolerance, or None if none.
@@ -249,7 +303,12 @@ def find_scenario_regression(best_traces, cand_traces):
     hide a severe regression on one scenario offset by gains on others.
     """
     for b, c in zip(best_traces, cand_traces):
-        allowed = max(REGRESSION_ABS_TOLERANCE, REGRESSION_REL_TOLERANCE * b["score"])
+        scenario = _SCENARIO_BY_NAME[b["scenario"]]
+        no_fault_scenario = scenario.leak1_onset_s is None and scenario.leak2_onset_s is None
+        if no_fault_scenario:
+            allowed = NO_FAULT_REGRESSION_ABS_TOLERANCE
+        else:
+            allowed = max(FAULT_REGRESSION_ABS_TOLERANCE, FAULT_REGRESSION_REL_TOLERANCE * b["score"])
         if c["score"] > b["score"] + allowed:
             return b["scenario"], b["score"], c["score"]
     return None
@@ -294,7 +353,8 @@ def main():
         trial_idx = start_trial + i
         print(f"\n=== Trial {i + 1}/{num_trials} (gen_{trial_idx}) ===")
         failure_catalog = load_failure_catalog()
-        prompt = build_prompt(current_code, best_score, best_traces, failure_catalog)
+        context_relations = load_context_report()
+        prompt = build_prompt(current_code, best_score, best_traces, failure_catalog, context_relations)
         response = call_deepseek(prompt)
 
         if response is None:
@@ -304,6 +364,10 @@ def main():
         candidate_code = response.get("code", "")
         failure_analysis = response.get("failure_analysis")
         proposed_change = response.get("proposed_change")
+        new_relations = response.get("relations_learned") or []
+        if new_relations:
+            print(f"[LEARNED] {new_relations}")
+        append_context_report(trial_idx, new_relations)
 
         ok, reason = check_source(candidate_code, required_args=MIMO_REQUIRED_ARGS)
         if not ok:
